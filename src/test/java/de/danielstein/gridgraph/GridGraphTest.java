@@ -3,6 +3,8 @@ package de.danielstein.gridgraph;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class GridGraphTest {
 
 
@@ -24,12 +26,28 @@ public class GridGraphTest {
     }
 
     @Test
-    public void testCountEdges2Start() {
+    public void testMaxEdgeCount2Start() {
         GridGraph<Integer> graph = generateTestGraph();
         assertEquals(2,graph.domainObj2Vertex.get(4).targetConnections.size());
         assertEquals(3,graph.maxEdgeCount2Start(graph.domainObj2Vertex.get(4)));
         assertEquals(2,graph.maxEdgeCount2Start(graph.domainObj2Vertex.get(3)));
         assertEquals(0,graph.maxEdgeCount2Start(graph.domainObj2Vertex.get(1)));
+    }
+
+    @Test
+    void testFindEnd() {
+        GridGraph<Integer> graph = generateTestGraph();
+        assertEquals(graph.domainObj2Vertex.get(4),
+                graph.findEnd());
+    }
+
+    @Test
+    void ensureRowPresent() {
+        GridGraph<Integer> gridGraph = new GridGraph<>();
+        gridGraph.ensureRowPresent(9,15);
+        List<Vertex> rowsLayer8 = gridGraph.layers.get(8);
+        List<Vertex> rowsLayer2 = gridGraph.layers.get(2);
+        assertEquals(15,rowsLayer8.size());
     }
 }
 

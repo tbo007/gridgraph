@@ -1,9 +1,6 @@
 package de.danielstein.gridgraph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Indexierung 1 bassiert...
@@ -19,7 +16,7 @@ public class GridGraph<T> {
 
     final Map<T,Vertex> domainObj2Vertex = new HashMap<>();
 
-    private final List<List<Vertex>> layer = new ArrayList<>();
+    final List<List<Vertex>> layers = new ArrayList<>();
 
 
 
@@ -48,14 +45,47 @@ public class GridGraph<T> {
      * Außerdem werden Fakeknoten eingefügt, wenn eine Kante länger als ein Layer ist,
      *      * so dass jede Kante maximal auf einen Knoten im nächstgelegenen Layer zeigt.
      * */
-    public void layering() {
-    }
+//    public GridGraph<T> layering() {
+       // layers.clear()
+//        domainObj2Vertex.values().forEach(v -> {
+//            int layer, row;
+//            if(v instanceof PreCordinateVertex) {
+//                PreCordinateVertex pcV = (PreCordinateVertex) v;
+//
+//                layer = pcV.layerhint;
+//                row = pcV.rowhint;
+//            } else
+//
+//
+//        });
+//
+//
+//        return this;
+//    }
 
     void addFakeNotes() {
     }
 
 
     //---- UtiMethods ---
+
+    void ensureRowPresent(int layer, int row) {
+        int layerNeeded = layer - layers.size();
+        for (int i = layerNeeded; i >0 ; i--) {
+            layers.add(new ArrayList<>());
+        }
+        List<Vertex> rows = layers.get(layer - 1);// java 0 based
+        int rowsNeeded = row - rows.size();
+        for (int i = rowsNeeded; i >0 ; i--) {
+            rows.add(null);
+        }
+    }
+
+
+    Vertex findEnd() {
+        return domainObj2Vertex.values().stream().filter(v -> v.sourceConnections.isEmpty()).findAny().get();
+    }
+
     int maxEdgeCount2Start(Vertex v) {
         return maxEdgeCount2Start(v,0);
     }

@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/maven/archetype.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/archetype-resources/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/archetype-resources/src/main/java/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/archetype-resources/src/test/java/AppTest.java" afterDir="false" />
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Init Commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/PreCordinateVertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/PreCordinateVertex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,10 +41,36 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "main"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="de.danielstein.gridgraph" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.GridGraphTest.ensureRowPresent">
+    <configuration name="GridGraphTest.ensureRowPresent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
+      <option name="METHOD_NAME" value="ensureRowPresent" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="GridGraphTest.testCountEdges2Start" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -67,8 +87,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GridGraphTest.testFindEnd" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
+      <option name="METHOD_NAME" value="testFindEnd" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.GridGraphTest.ensureRowPresent" />
+        <item itemvalue="JUnit.GridGraphTest.testFindEnd" />
         <item itemvalue="JUnit.GridGraphTest.testCountEdges2Start" />
       </list>
     </recent_temporary>
@@ -82,19 +120,43 @@
       <option name="presentableId" value="Default" />
       <updated>1716031440357</updated>
     </task>
+    <task id="LOCAL-00001" summary="Init Commit">
+      <option name="closed" value="true" />
+      <created>1716045770940</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716045770940</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Init Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Init Commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
-          <line>36</line>
+          <line>53</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
-          <line>62</line>
+          <line>91</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
