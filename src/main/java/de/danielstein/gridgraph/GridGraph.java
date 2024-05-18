@@ -1,0 +1,85 @@
+package de.danielstein.gridgraph;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Indexierung 1 bassiert...
+ * Der Knoten der nur ausgehende Verbindung hat, wird als Start Knoten gewertet.
+ * Der Knoten der nur eingehende Verbindung hat, wird als End Knoten gewertet.
+ *
+ * Es können aber auch Knoten ohne ausgehende Verbindungen gelayoutet werden, in dem
+ * eine Kante z.B. zum Ende angegeben wird...
+ */
+public class GridGraph<T> {
+
+    private int vertexNumber = 0;
+
+    final Map<T,Vertex> domainObj2Vertex = new HashMap<>();
+
+    private final List<List<Vertex>> layer = new ArrayList<>();
+
+
+
+    public GridGraph<T> addVertex(T obj) {
+        Vertex vertex = newVertex();
+        domainObj2Vertex.putIfAbsent(obj,vertex);
+        return this;
+    }
+
+    public GridGraph<T> addVertex(T obj, int layer, int row) {
+        Vertex vertex = newVertex(layer,row);
+        domainObj2Vertex.putIfAbsent(obj,vertex);
+        return this;
+    }
+
+    public GridGraph<T> addEdge(T source , T target, int weight) {
+        Vertex sourceVertex = domainObj2Vertex.get(source);
+        Vertex targetVertex = domainObj2Vertex.get(target);
+        Edge edge = new Edge(sourceVertex,targetVertex,weight);
+        sourceVertex.sourceConnections.add(edge);
+        targetVertex.targetConnections.add(edge);
+        return this;
+    }
+
+    /** Geht alle ausgehenden Verbindungen rekursiv durch und verteilt die Knoten auf Layer.
+     * Außerdem werden Fakeknoten eingefügt, wenn eine Kante länger als ein Layer ist,
+     *      * so dass jede Kante maximal auf einen Knoten im nächstgelegenen Layer zeigt.
+     * */
+    public void layering() {
+    }
+
+    void addFakeNotes() {
+    }
+
+
+    //---- UtiMethods ---
+    int maxEdgeCount2Start(Vertex v) {
+        return maxEdgeCount2Start(v,0);
+    }
+
+    int maxEdgeCount2Start(Vertex v, int cnt) {
+        if(v.targetConnections.isEmpty()) {
+            return cnt;
+        }
+        cnt++;
+        int recVal = cnt;
+        for (Edge targetEdge: v.targetConnections){
+            cnt = Math.max(cnt,maxEdgeCount2Start(targetEdge.source,recVal));
+        }
+        return cnt;
+    }
+
+
+
+    Vertex newVertex() {
+        return new Vertex(++vertexNumber);
+
+    } Vertex newVertex(int layer, int row) {
+        return new PreCordinateVertex<>(++vertexNumber,layer,row);
+    }
+
+
+}
