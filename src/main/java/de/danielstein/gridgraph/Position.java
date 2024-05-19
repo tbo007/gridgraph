@@ -8,4 +8,12 @@ public class Position {
         this.layer = layer;
         this.row = row;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "layer=" + layer +
+                ", row=" + row +
+                '}';
+    }
 }

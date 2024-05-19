@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Entw. Layering / Util Methods">
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Entw. addFakeNotes / Util Methods">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Edge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/PreCordinateVertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/PreCordinateVertex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Position.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -91,7 +90,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.ensureRowPresent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GridGraphTest.addFakeNotes2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -101,7 +100,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="ensureRowPresent" />
+      <option name="METHOD_NAME" value="addFakeNotes2" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -123,7 +122,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.t" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GridGraphTest.layering2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -133,7 +132,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="t" />
+      <option name="METHOD_NAME" value="layering2" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -142,10 +141,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.GridGraphTest" />
-        <item itemvalue="JUnit.GridGraphTest.addFakeNotes" />
-        <item itemvalue="JUnit.GridGraphTest.t" />
+        <item itemvalue="JUnit.GridGraphTest.addFakeNotes2" />
+        <item itemvalue="JUnit.GridGraphTest.layering2" />
         <item itemvalue="JUnit.GridGraphTest.layering" />
-        <item itemvalue="JUnit.GridGraphTest.ensureRowPresent" />
+        <item itemvalue="JUnit.GridGraphTest.addFakeNotes" />
       </list>
     </recent_temporary>
   </component>
@@ -182,7 +181,23 @@
       <option name="project" value="LOCAL" />
       <updated>1716109540079</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Entw. addFakeNotes / Util Methods">
+      <option name="closed" value="true" />
+      <created>1716114424324</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1716114424324</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Entw. addFakeNotes / Util Methods">
+      <option name="closed" value="true" />
+      <created>1716114447836</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1716114447836</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -200,22 +215,29 @@
     <MESSAGE value="Init Commit" />
     <MESSAGE value="Entw." />
     <MESSAGE value="Entw. Layering / Util Methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="Entw. Layering / Util Methods" />
+    <MESSAGE value="Entw. addFakeNotes / Util Methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="Entw. addFakeNotes / Util Methods" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
-          <line>44</line>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
+          <line>90</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <condition expression="target.domainObj.equals(&quot;ende&quot;)" language="JAVA" />
           <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="8" />
+          <line>117</line>
+          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="de.danielstein.gridgraph.GridGraph" memberName="layers" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

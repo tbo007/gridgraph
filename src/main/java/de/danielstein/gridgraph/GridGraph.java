@@ -39,6 +39,10 @@ public class GridGraph<T> {
         return  addEdge(sourceVertex,targetVertex,weight);
     }
 
+    public GridGraph<T> addEdge(T source , T target) {
+        return addEdge(source,target,1);
+    }
+
 
 
     public Position getPosition(T domainObject) {
@@ -74,17 +78,17 @@ public class GridGraph<T> {
             Vertex target = currEdge.target;
             int sourceLayer = getPosition(source).layer;
             int targetLayer = getPosition(target).layer;
-            if(targetLayer - sourceLayer >1) {
-                currEdge.source.sourceConnections.remove(currEdge);
-                currEdge.target.targetConnections.remove(currEdge);
+            if(targetLayer - sourceLayer == 1) {
+                return; // Knoten sind schon direkte Layer Nachbarn
             }
-            int fakeLayerIndex = sourceLayer +1;
+            // Alte Verbindung entfernen und FakeKnoten einfügen
+            currEdge.source.sourceConnections.remove(currEdge);
+            currEdge.target.targetConnections.remove(currEdge);
 
-            while (fakeLayerIndex < targetLayer) {
+            for (int fi = sourceLayer+1; fi <targetLayer ; fi++) {
                 target = newVertex(null);
-                add(fakeLayerIndex,target);
+                add(fi,target);
                 addEdge(source,target, currEdge.weight);
-                fakeLayerIndex++;
                 source = target;
             }
             addEdge(source,currEdge.target,currEdge.weight);
@@ -117,7 +121,7 @@ public class GridGraph<T> {
     }
 
     void add(int layer, Vertex v) {
-        ensureRowPresent(layer,1);
+        ensureRowPresent(layer,0);
         List<Vertex> rows = layers.get(layer - 1);// java 0 based
         rows.add(v);
     }

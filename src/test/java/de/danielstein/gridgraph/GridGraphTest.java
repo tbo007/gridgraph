@@ -1,8 +1,11 @@
 package de.danielstein.gridgraph;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GridGraphTest {
@@ -12,7 +15,7 @@ public class GridGraphTest {
      * 1---2---3---4
      * |---5-------|
      */
-    private GridGraph<Integer> generateTestGraph() {
+    private GridGraph<Integer> generateSimpleGraph() {
         Integer v1 = Integer.valueOf(1);
         Integer v2 = Integer.valueOf(2); //PrePos
         Integer v3 = Integer.valueOf(3);
@@ -24,9 +27,25 @@ public class GridGraphTest {
                 .addEdge(v1, v5, 1).addEdge(v5, v4, 1);
     }
 
+    /**
+     * START--FANL--SAVE--DBVA-------------ENDE
+     *           +           +--RESTORE----+
+     *           +-----------+--FREL-------+
+     */
+    private GridGraph<String> generateJPL() {
+        List<String> v = Arrays.asList("start", "fanl", "save", "dbva", "restore", "frel", "ende");
+        GridGraph<String>  graph = new GridGraph<String>();
+        v.forEach(graph::addVertex);
+        graph.addEdge(v.get(0),v.get(1)).addEdge(v.get(1),v.get(2)).addEdge(v.get(2),v.get(3)).addEdge(v.get(3),v.get(6))
+                .addEdge(v.get(3),v.get(4)).addEdge(v.get(3),v.get(5))
+                .addEdge(v.get(4),v.get(6)).addEdge(v.get(5), v.get(6))
+                .addEdge(v.get(1),v.get(5));
+        return graph;
+    }
+
     @Test
     public void testMaxEdgeCount2Start() {
-        GridGraph<Integer> graph = generateTestGraph();
+        GridGraph<Integer> graph = generateSimpleGraph();
         assertEquals(2,graph.domainObj2Vertex.get(4).targetConnections.size());
         assertEquals(3,graph.maxEdgeCount2Start(graph.domainObj2Vertex.get(4)));
         assertEquals(2,graph.maxEdgeCount2Start(graph.domainObj2Vertex.get(3)));
@@ -44,7 +63,7 @@ public class GridGraphTest {
 
     @Test
     void layering() {
-        GridGraph<Integer> graph = generateTestGraph().layering();
+        GridGraph<Integer> graph = generateSimpleGraph().layering();
         Position position = graph.getPosition(Integer.valueOf(2));
         assertEquals(2,position.layer);
         assertEquals(1,position.row);
@@ -53,7 +72,7 @@ public class GridGraphTest {
 
     @Test
     void addFakeNotes() {
-        GridGraph<Integer> graph = generateTestGraph().layering().addFakeNotes();
+        GridGraph<Integer> graph = generateSimpleGraph().layering().addFakeNotes();
 
         Vertex v5 = graph.domainObj2Vertex.get(Integer.valueOf(5));
         Vertex v4 = graph.domainObj2Vertex.get(Integer.valueOf(4));
@@ -62,7 +81,17 @@ public class GridGraphTest {
         Vertex assumeV4 = fakeEdge.sourceConnections.get(0).target;
         assertEquals(v5,assumeV5);
         assertEquals(v4,assumeV4);
+    }
 
+    @Test
+    void addFakeNotes2() {
+        GridGraph<String> graph = generateJPL();
+        graph.layering().addFakeNotes();
+        Position position = graph.getPosition("start");
+        assertEquals(1,position.layer, "layer");
+        assertEquals(1,position.row, "row");
+        Vertex vEnde = graph.domainObj2Vertex.get("ende");
+        assertEquals(3, vEnde.targetConnections.size(),"ende targets");
 
     }
 }
