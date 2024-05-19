@@ -22,9 +22,6 @@ public class GridGraphTest {
                 .addVertex(v5)
                 .addEdge(v1, v2, 1).addEdge(v2, v3, 1).addEdge(v3, v4, 1)
                 .addEdge(v1, v5, 1).addEdge(v5, v4, 1);
-
-
-
     }
 
     @Test
@@ -47,11 +44,25 @@ public class GridGraphTest {
 
     @Test
     void layering() {
-        GridGraph<Integer> graph = generateTestGraph();
-        graph.layering();
-        GridGraph.Position position = graph.getPosition(Integer.valueOf(2));
+        GridGraph<Integer> graph = generateTestGraph().layering();
+        Position position = graph.getPosition(Integer.valueOf(2));
         assertEquals(2,position.layer);
         assertEquals(1,position.row);
+
+    }
+
+    @Test
+    void addFakeNotes() {
+        GridGraph<Integer> graph = generateTestGraph().layering().addFakeNotes();
+
+        Vertex v5 = graph.domainObj2Vertex.get(Integer.valueOf(5));
+        Vertex v4 = graph.domainObj2Vertex.get(Integer.valueOf(4));
+        Vertex assumeV5 = v5.sourceConnections.get(0).source;
+        Vertex fakeEdge = v5.sourceConnections.get(0).target;
+        Vertex assumeV4 = fakeEdge.sourceConnections.get(0).target;
+        assertEquals(v5,assumeV5);
+        assertEquals(v4,assumeV4);
+
 
     }
 }

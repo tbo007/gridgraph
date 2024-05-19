@@ -14,4 +14,9 @@ public class Edge {
         this.target = target;
         this.weight = weight;
     }
+
+    @Override
+    public String toString() {
+        return "Edge{" +"source=" + source +", target=" + target +", weight=" + weight +'}';
+    }
 }

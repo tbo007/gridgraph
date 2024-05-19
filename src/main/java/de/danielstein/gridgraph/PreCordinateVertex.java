@@ -4,8 +4,8 @@ public class PreCordinateVertex extends Vertex{
 
     final int layerhint;
     final int rowhint;
-    PreCordinateVertex(int number, int layer, int row) {
-        super(number);
+    PreCordinateVertex(Object domObj, int number, int layer, int row) {
+        super(domObj,number);
         this.layerhint = layer;
         this.rowhint = row;
     }

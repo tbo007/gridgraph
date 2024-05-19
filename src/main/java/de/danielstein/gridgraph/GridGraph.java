@@ -1,6 +1,7 @@
 package de.danielstein.gridgraph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Indexierung 1 bassiert...
@@ -12,16 +13,6 @@ import java.util.*;
  */
 public class GridGraph<T> {
 
-    public class Position {
-        public final int layer;
-        public final int row;
-
-        public Position(int layer, int row) {
-            this.layer = layer;
-            this.row = row;
-        }
-    }
-
     private int vertexNumber = 0;
 
     final Map<T,Vertex> domainObj2Vertex = new HashMap<>();
@@ -31,13 +22,13 @@ public class GridGraph<T> {
 
 
     public GridGraph<T> addVertex(T obj) {
-        Vertex vertex = newVertex();
+        Vertex vertex = newVertex(obj);
         domainObj2Vertex.putIfAbsent(obj,vertex);
         return this;
     }
 
     public GridGraph<T> addVertex(int layer, int row,T obj) {
-        Vertex vertex = newVertex(layer,row);
+        Vertex vertex = newVertex(obj,layer,row);
         domainObj2Vertex.putIfAbsent(obj,vertex);
         return this;
     }
@@ -45,23 +36,16 @@ public class GridGraph<T> {
     public GridGraph<T> addEdge(T source , T target, int weight) {
         Vertex sourceVertex = domainObj2Vertex.get(source);
         Vertex targetVertex = domainObj2Vertex.get(target);
-        Edge edge = new Edge(sourceVertex,targetVertex,weight);
-        sourceVertex.sourceConnections.add(edge);
-        targetVertex.targetConnections.add(edge);
-        return this;
+        return  addEdge(sourceVertex,targetVertex,weight);
     }
+
+
 
     public Position getPosition(T domainObject) {
         Vertex vertex = domainObj2Vertex.get(domainObject);
-        for (int i = 0; i < layers.size(); i++) {
-            List<Vertex> rows = layers.get(i);
-            int row = rows.indexOf(vertex);
-            if (row >= 0) {
-                return new Position(i + 1, row + 1); // Java 0 based
-            }
-        }
-        return null;
+        return getPosition(vertex);
     }
+
 
 
 
@@ -82,13 +66,55 @@ public class GridGraph<T> {
         return this;
     }
 
-    void addFakeNotes() {
+    public GridGraph<T> addFakeNotes() {
+        List<Edge> sourceEdges = layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
+                .filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream()).collect(Collectors.toList());
+        sourceEdges.forEach( currEdge -> {
+            Vertex source = currEdge.source;
+            Vertex target = currEdge.target;
+            int sourceLayer = getPosition(source).layer;
+            int targetLayer = getPosition(target).layer;
+            if(targetLayer - sourceLayer >1) {
+                currEdge.source.sourceConnections.remove(currEdge);
+                currEdge.target.targetConnections.remove(currEdge);
+            }
+            int fakeLayerIndex = sourceLayer +1;
+
+            while (fakeLayerIndex < targetLayer) {
+                target = newVertex(null);
+                add(fakeLayerIndex,target);
+                addEdge(source,target, currEdge.weight);
+                fakeLayerIndex++;
+                source = target;
+            }
+            addEdge(source,currEdge.target,currEdge.weight);
+        }
+        );
+        return this;
     }
 
 
 
 
     //---- UtiMethods ---
+
+    Position getPosition(Vertex vertex) {
+        for (int i = 0; i < layers.size(); i++) {
+            List<Vertex> rows = layers.get(i);
+            int row = rows.indexOf(vertex);
+            if (row >= 0) {
+                return new Position(i + 1, row + 1); // Java 0 based
+            }
+        }
+        return null;
+    }
+
+     GridGraph<T> addEdge(Vertex source , Vertex target, int weight) {
+        Edge edge = new Edge(source,target,weight);
+        source.sourceConnections.add(edge);
+        target.targetConnections.add(edge);
+        return this;
+    }
 
     void add(int layer, Vertex v) {
         ensureRowPresent(layer,1);
@@ -115,10 +141,10 @@ public class GridGraph<T> {
         }
     }
 
-    Vertex get(int layer, int row) {
-        List<Vertex> rows = layers.get(layer - 1);// java 0 based
-        return rows.get(row-1);
-    }
+//    Vertex get(int layer, int row) {
+//        List<Vertex> rows = layers.get(layer - 1);// java 0 based
+//        return rows.get(row-1);
+//    }
 
     void ensureRowPresent(int layer, int row) {
         int layerNeeded = layer - layers.size();
@@ -150,11 +176,11 @@ public class GridGraph<T> {
 
 
 
-    Vertex newVertex() {
-        return new Vertex(++vertexNumber);
+    Vertex newVertex(T obj) {
+        return new Vertex(obj,++vertexNumber);
 
-    } Vertex newVertex(int layer, int row) {
-        return new PreCordinateVertex(++vertexNumber,layer,row);
+    } Vertex newVertex(T obj,int layer, int row) {
+        return new PreCordinateVertex(obj,++vertexNumber,layer,row);
     }
 
 
