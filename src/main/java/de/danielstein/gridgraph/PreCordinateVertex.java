@@ -1,6 +1,6 @@
 package de.danielstein.gridgraph;
 
-public class PreCordinateVertex<T> extends Vertex{
+public class PreCordinateVertex extends Vertex{
 
     final int layerhint;
     final int rowhint;
