@@ -71,8 +71,7 @@ public class GridGraph<T> {
     }
 
     public GridGraph<T> addFakeNotes() {
-        List<Edge> sourceEdges = layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
-                .filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream()).collect(Collectors.toList());
+        List<Edge> sourceEdges = getSourceEdges();
         sourceEdges.forEach( currEdge -> {
             Vertex source = currEdge.source;
             Vertex target = currEdge.target;
@@ -101,6 +100,12 @@ public class GridGraph<T> {
 
 
     //---- UtiMethods ---
+
+    List<Edge> getSourceEdges() {
+        List<Edge> sourceEdges = layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
+                .filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream()).collect(Collectors.toList());
+        return sourceEdges;
+    }
 
     Position getPosition(Vertex vertex) {
         for (int i = 0; i < layers.size(); i++) {
@@ -145,10 +150,16 @@ public class GridGraph<T> {
         }
     }
 
-//    Vertex get(int layer, int row) {
-//        List<Vertex> rows = layers.get(layer - 1);// java 0 based
-//        return rows.get(row-1);
-//    }
+    Vertex get(int layer, int row) {
+        Vertex retVal = null;
+        if(layer <= layers.size()) {
+            List<Vertex> rows = layers.get(layer - 1);// java 0 based
+            if(row <= rows.size()) {
+               retVal = rows.get(row-1);
+            }
+        }
+        return retVal;
+    }
 
     void ensureRowPresent(int layer, int row) {
         int layerNeeded = layer - layers.size();

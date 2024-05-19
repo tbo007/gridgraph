@@ -20,6 +20,14 @@ public class Vertex {
         this.domainObj = domainObj;
     }
 
+    public boolean targets (Vertex v) {
+        return sourceConnections.stream().map(e -> (e.target)).anyMatch(e-> e.equals(v));
+    }
+
+    public boolean incomes(Vertex v) {
+        return targetConnections.stream().map(e -> (e.source)).anyMatch(e-> e.equals(v));
+    }
+
     @Override
     public String toString() {
         return  "Vertex: " + number + " / " +   (domainObj == null ? "FakeVertex" :  "DomainObj: " + domainObj.toString());
