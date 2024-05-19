@@ -98,6 +98,39 @@ public class GridGraph<T> {
 
 
 
+    /** Nach Layern sortierte kreuzende Verbindungen
+     * So sollte es überkrezungsfrei sein :
+     * a1 - b1
+     * a2 - b2
+     *
+     * nicht so: a1  b2
+     *             X
+     *           a2  b1
+     * Zum detektieren: Wenn  a1 < a2, werden die Vertexe geholt, die in den Zeilen über a1 liegen unde deren Target Vertexe
+     * im nächsten Layer ermittelt. Danach werden deren Positionen ermittelt. Wenn a1 über einer dieser Positionen liegt hat
+     * man ein Kreuz
+     * Es kann atürlich auch umgedreht sein ...
+     * **/
+    public Collection<Edge> getCrossingEdges() {
+      return  getSourceEdges().stream().filter(edge -> {
+            Position pa1 = getPosition(edge.source);
+            Position pb1 = getPosition(edge.target);
+            if(pa1.isSmallerRow(pb1)) {
+               return getAboveRows(pa1.layer, pa1.row).stream().flatMap(v -> v.sourceConnections.stream())
+                        .map(e -> e.target).map(this::getPosition).
+                       anyMatch((pb1::isGreaterRow));
+            }   if(pa1.isGreaterRow(pb1)) {
+               return getBelowRows(pa1.layer, pa1.row).stream().flatMap(v -> v.sourceConnections.stream())
+                        .map(e -> e.target).map(this::getPosition).
+                       anyMatch((pb1::isSmallerRow));
+            }
+            return false;
+        }).distinct().collect(Collectors.toList());
+
+    }
+
+
+
 
     //---- UtiMethods ---
 
@@ -160,6 +193,30 @@ public class GridGraph<T> {
         }
         return retVal;
     }
+
+    Collection<Vertex> getAboveRows(int layer, int row) {
+        Collection<Vertex> retVal = Collections.emptyList();
+        if(layer <= layers.size()) {
+            List<Vertex> rows = layers.get(layer - 1);// java 0 based
+            if(row < rows.size()) {
+                retVal = new ArrayList<>(rows.subList(row, rows.size())); // row nicht -1, denn wir wollen1 ja alles unter dieser Row...
+            }
+        }
+        return retVal;
+    }
+
+    Collection<Vertex> getBelowRows(int layer, int row) {
+        Collection<Vertex> retVal = Collections.emptyList();
+        if(layer <= layers.size()) {
+            List<Vertex> rows = layers.get(layer - 1);// java 0 based
+            if(row-1 > 0) {
+                retVal = new ArrayList<>(rows.subList(0, row)); // row nicht -1, denn wir wollen1 ja alles über dieser Row...
+            }
+        }
+        return retVal;
+    }
+
+
 
     void ensureRowPresent(int layer, int row) {
         int layerNeeded = layer - layers.size();

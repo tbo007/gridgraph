@@ -5,8 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.security.SecureRandom;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class GridGraphTest {
 
@@ -92,6 +93,33 @@ public class GridGraphTest {
         assertEquals(1,position.row, "row");
         Vertex vEnde = graph.domainObj2Vertex.get("ende");
         assertEquals(3, vEnde.targetConnections.size(),"ende targets");
+
+    }
+
+    @Test
+    void getCrossingEdges() {
+        GridGraph<String> graph = generateJPL().layering().addFakeNotes();
+        System.out.println(graph.getCrossingEdges());
+        assertEquals(3, graph.getCrossingEdges().size());
+
+    }
+
+    @Test
+    void shuffleTest () {
+        Random random = new SecureRandom();
+        GridGraph<String> graph = generateJPL().layering().addFakeNotes();
+        IntStream.rangeClosed(1,100).boxed().forEach( i ->  {
+
+            int crSize = graph.getCrossingEdges().size();
+
+                System.out.println(crSize);
+//           graph.layers.forEach(r -> Collections.shuffle(r,random));
+            List<Vertex> rows = graph.layers.get(3);
+            Collections.shuffle(rows,random);
+
+                }
+        );
+
 
     }
 }

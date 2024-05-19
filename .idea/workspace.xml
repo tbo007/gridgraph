@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Bugfixes addFakeNotes">
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Entw. Crossing Detect">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Position.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +57,7 @@
       <recent name="de.danielstein.gridgraph" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GridGraphTest.getCrossingEdges">
+  <component name="RunManager" selected="JUnit.GridGraphTest.shuffleTest">
     <configuration name="GridGraphTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -105,7 +105,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.layering" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GridGraphTest.randtest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -115,13 +115,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="layering" />
+      <option name="METHOD_NAME" value="randtest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.layering2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GridGraphTest.shuffleTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -131,7 +131,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="layering2" />
+      <option name="METHOD_NAME" value="shuffleTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -139,11 +139,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.GridGraphTest.shuffleTest" />
         <item itemvalue="JUnit.GridGraphTest.getCrossingEdges" />
-        <item itemvalue="JUnit.GridGraphTest.addFakeNotes2" />
         <item itemvalue="JUnit.GridGraphTest" />
-        <item itemvalue="JUnit.GridGraphTest.layering2" />
-        <item itemvalue="JUnit.GridGraphTest.layering" />
+        <item itemvalue="JUnit.GridGraphTest.randtest" />
+        <item itemvalue="JUnit.GridGraphTest.addFakeNotes2" />
       </list>
     </recent_temporary>
   </component>
@@ -204,7 +204,23 @@
       <option name="project" value="LOCAL" />
       <updated>1716136753643</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Bugfixes">
+      <option name="closed" value="true" />
+      <created>1716145966680</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1716145966680</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Entw. Crossing Detect">
+      <option name="closed" value="true" />
+      <created>1716145985994</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1716145985994</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -224,16 +240,17 @@
     <MESSAGE value="Entw. Layering / Util Methods" />
     <MESSAGE value="Entw. addFakeNotes / Util Methods" />
     <MESSAGE value="Bugfixes addFakeNotes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfixes addFakeNotes" />
+    <MESSAGE value="Bugfixes" />
+    <MESSAGE value="Entw. Crossing Detect" />
+    <option name="LAST_COMMIT_MESSAGE" value="Entw. Crossing Detect" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <condition expression="&quot;dbva&quot;.equals(e.source.domainObj) &amp;&amp; Objects.isNull(e.target.domainObj)" language="JAVA" mode="CODE_FRAGMENT" />
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
-          <line>113</line>
-          <option name="timeStamp" value="17" />
+          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
+          <line>102</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
