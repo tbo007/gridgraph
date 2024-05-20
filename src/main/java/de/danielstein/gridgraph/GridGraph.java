@@ -15,9 +15,12 @@ public class GridGraph<T> {
 
     private int vertexNumber = 0;
 
-    final Map<T,Vertex> domainObj2Vertex = new HashMap<>();
+    // LinkedHashMap: Vertexe in der Reihenfolge des Hinzufügens verarbeiten
+    final Map<T,Vertex> domainObj2Vertex = new LinkedHashMap<>();
 
-    final List<List<Vertex>> layers = new ArrayList<>();
+    final Collection<Vertex> fakeVertexes = new ArrayList<>();
+
+    List<List<Vertex>> layers = new ArrayList<>();
 
 
 
@@ -70,7 +73,7 @@ public class GridGraph<T> {
         return this;
     }
 
-    public GridGraph<T> addFakeNotes() {
+    public GridGraph<T> addFakeVertexes() {
         List<Edge> sourceEdges = getSourceEdges();
         sourceEdges.forEach( currEdge -> {
             Vertex source = currEdge.source;
@@ -86,6 +89,7 @@ public class GridGraph<T> {
 
             for (int fi = sourceLayer+1; fi <targetLayer ; fi++) {
                 target = newVertex(null);
+                fakeVertexes.add(target);
                 add(fi,target);
                 addEdge(source,target, currEdge.weight);
                 source = target;
@@ -110,9 +114,18 @@ public class GridGraph<T> {
      * im nächsten Layer ermittelt. Danach werden deren Positionen ermittelt. Wenn a1 über einer dieser Positionen liegt hat
      * man ein Kreuz
      * Es kann atürlich auch umgedreht sein ...
+     *
+     * Ein weiterer Fall ist z.B. dieser:
+     *  a1   b1    c1
+     *     x Fake x
+     *  a1 --> Fake --> c1
+     *  a1--> b1 --> c1
+     *  Dann Läuft später im Graph die Verbindung über b1 drüber, denn fake gibt es nicht mehr.
+     *  Also wird dies als Crossing gewertet. Fakes haben immer nur eine eingehende und ausgehende Verbindung...
+     *
      * **/
     public Collection<Edge> getCrossingEdges() {
-      return  getSourceEdges().stream().filter(edge -> {
+        Collection<Edge> retval = getSourceEdges().stream().filter(edge -> {
             Position pa1 = getPosition(edge.source);
             Position pb1 = getPosition(edge.target);
             if(pa1.isSmallerRow(pb1)) {
@@ -124,15 +137,65 @@ public class GridGraph<T> {
                         .map(e -> e.target).map(this::getPosition).
                        anyMatch((pb1::isSmallerRow));
             }
-            return false;
-        }).distinct().collect(Collectors.toList());
+          return false;
+
+      }).collect(Collectors.toSet());
+
+      fakeVertexes.forEach(fake -> {
+            Position fakePos = getPosition(fake);
+            Position fakeSourceConVertexPos = getPosition(fake.targetConnections.get(0).source);
+            Position fakeTargetConVertexPos = getPosition(fake.sourceConnections.get(0).target);
+            if(fakePos.row != fakeSourceConVertexPos.row && fakePos.row != fakeTargetConVertexPos.row) {
+                retval.add(fake.targetConnections.get(0));
+            }
+        }
+        );
+
+      return retval;
+
+
+
+
 
     }
 
+    public GridGraph<T> layout() {
+        int crossCount = getCrossingEdges().size();
+        if(crossCount ==0) {
+            return this;
+        }
+        int maxTries = 10000;
+        Random random = new Random();
+        List<List<Vertex>> bestlayersSoFar = cloneLayers();
+
+        while(maxTries > 0  && crossCount > 0) {
+            List<Integer> layerWithCrossings =  getCrossingEdges().stream().map(e -> e.target).map(this::getPosition).map(p -> p.layer)
+                    .distinct().sorted().collect(Collectors.toList());
+            for (Integer i: layerWithCrossings) {
+                Collections.shuffle(layers.get(i-1)); // Java 0 based
+                int newCrossCount = getCrossingEdges().size();
+                if (newCrossCount <= crossCount) {
+                    crossCount = newCrossCount;
+                    bestlayersSoFar = cloneLayers();
+                } else {
+                    layers = bestlayersSoFar;
+                }
+            };
+            maxTries--;
+        }
+        return this;
+    }
+
+    //--- UtiMethods ---//
+    List<List<Vertex>> cloneLayers() {
+        List<List<Vertex>> clone = new ArrayList<>(layers.size());
+        layers.forEach(vl -> {
+            clone.add(new ArrayList<>(vl));
+        });
+        return clone;
+    }
 
 
-
-    //---- UtiMethods ---
 
     List<Edge> getSourceEdges() {
         List<Edge> sourceEdges = layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
@@ -216,8 +279,6 @@ public class GridGraph<T> {
         return retVal;
     }
 
-
-
     void ensureRowPresent(int layer, int row) {
         int layerNeeded = layer - layers.size();
         for (int i = layerNeeded; i >0 ; i--) {
@@ -246,14 +307,10 @@ public class GridGraph<T> {
         return cnt;
     }
 
-
-
     Vertex newVertex(T obj) {
         return new Vertex(obj,++vertexNumber);
 
     } Vertex newVertex(T obj,int layer, int row) {
         return new PreCordinateVertex(obj,++vertexNumber,layer,row);
     }
-
-
 }

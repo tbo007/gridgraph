@@ -2,12 +2,10 @@ package de.danielstein.gridgraph;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.javatuples.Pair;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
-import java.security.SecureRandom;
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class GridGraphTest {
 
@@ -73,7 +71,7 @@ public class GridGraphTest {
 
     @Test
     void addFakeNotes() {
-        GridGraph<Integer> graph = generateSimpleGraph().layering().addFakeNotes();
+        GridGraph<Integer> graph = generateSimpleGraph().layering().addFakeVertexes();
 
         Vertex v5 = graph.domainObj2Vertex.get(Integer.valueOf(5));
         Vertex v4 = graph.domainObj2Vertex.get(Integer.valueOf(4));
@@ -87,7 +85,7 @@ public class GridGraphTest {
     @Test
     void addFakeNotes2() {
         GridGraph<String> graph = generateJPL();
-        graph.layering().addFakeNotes();
+        graph.layering().addFakeVertexes();
         Position position = graph.getPosition("start");
         assertEquals(1,position.layer, "layer");
         assertEquals(1,position.row, "row");
@@ -98,29 +96,18 @@ public class GridGraphTest {
 
     @Test
     void getCrossingEdges() {
-        GridGraph<String> graph = generateJPL().layering().addFakeNotes();
+        GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
         System.out.println(graph.getCrossingEdges());
-        assertEquals(3, graph.getCrossingEdges().size());
+        assertEquals(1, graph.getCrossingEdges().size());
 
     }
 
     @Test
-    void shuffleTest () {
-        Random random = new SecureRandom();
-        GridGraph<String> graph = generateJPL().layering().addFakeNotes();
-        IntStream.rangeClosed(1,100).boxed().forEach( i ->  {
-
-            int crSize = graph.getCrossingEdges().size();
-
-                System.out.println(crSize);
-//           graph.layers.forEach(r -> Collections.shuffle(r,random));
-            List<Vertex> rows = graph.layers.get(3);
-            Collections.shuffle(rows,random);
-
-                }
-        );
-
-
+    void layout () {
+        GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
+        Assumptions.assumeFalse(graph.getCrossingEdges().isEmpty());
+        graph.layout();
+        assertTrue(graph.getCrossingEdges().isEmpty());
     }
 }
 

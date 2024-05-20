@@ -1,13 +1,15 @@
 package de.danielstein.gridgraph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Vertex {
 
     private final int number;
 
-    private final  Object domainObj;
+    final  Object domainObj;
 
 
     final List<Edge> targetConnections = new ArrayList<>();
@@ -19,17 +21,29 @@ public class Vertex {
         this.number = number;
         this.domainObj = domainObj;
     }
-
-    public boolean targets (Vertex v) {
-        return sourceConnections.stream().map(e -> (e.target)).anyMatch(e-> e.equals(v));
+    /** true wenn this alle Verbindungen von other auch hat */
+    public boolean hasAllConnections(Vertex other) {
+        return incomingFrom().containsAll(other.outgoingTo()) &&
+                outgoingTo().containsAll(other.incomingFrom());
     }
 
-    public boolean incomes(Vertex v) {
-        return targetConnections.stream().map(e -> (e.source)).anyMatch(e-> e.equals(v));
+
+    private Collection<Vertex> incomingFrom() {
+        return targetConnections.stream().map(e-> e.source).collect(Collectors.toSet());
     }
+
+    private Collection<Vertex> outgoingTo() {
+        return sourceConnections.stream().map(e-> e.target).collect(Collectors.toSet());
+    }
+
+    public boolean isFake() {
+        return domainObj == null;
+    }
+
+
 
     @Override
     public String toString() {
-        return  "Vertex: " + number + " / " +   (domainObj == null ? "FakeVertex" :  "DomainObj: " + domainObj.toString());
+        return  "Vertex: " + number + " / " +   (isFake() ? "FakeVertex" :  "DomainObj: " + domainObj.toString());
     }
 }
