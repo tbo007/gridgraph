@@ -21,13 +21,7 @@ public class Vertex {
         this.number = number;
         this.domainObj = domainObj;
     }
-    /** true wenn this alle Verbindungen von other auch hat */
-    public boolean hasAllConnections(Vertex other) {
-        return incomingFrom().containsAll(other.outgoingTo()) &&
-                outgoingTo().containsAll(other.incomingFrom());
-    }
-
-
+   
     private Collection<Vertex> incomingFrom() {
         return targetConnections.stream().map(e-> e.source).collect(Collectors.toSet());
     }

@@ -108,6 +108,8 @@ public class GridGraphTest {
         Assumptions.assumeFalse(graph.getCrossingEdges().isEmpty());
         graph.layout();
         assertTrue(graph.getCrossingEdges().isEmpty());
+        Vertex fakeVertex = graph.get(5, 1);
+        assertTrue(fakeVertex.isFake());
     }
 }
 
