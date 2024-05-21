@@ -140,12 +140,12 @@ public class GridGraph<T> {
           return false;
 
       }).collect(Collectors.toSet());
-
       fakeVertexes.forEach(fake -> {
             Position fakePos = getPosition(fake);
             Position fakeSourceConVertexPos = getPosition(fake.targetConnections.get(0).source);
             Position fakeTargetConVertexPos = getPosition(fake.sourceConnections.get(0).target);
-            if(fakePos.row != fakeSourceConVertexPos.row && fakePos.row != fakeTargetConVertexPos.row) {
+            int compPos = fakePos.row-1;
+            if( compPos== fakeSourceConVertexPos.row && compPos == fakeTargetConVertexPos.row) {
                 retval.add(fake.targetConnections.get(0));
             }
         }
@@ -164,16 +164,19 @@ public class GridGraph<T> {
         if(crossCount ==0) {
             return this;
         }
-        int maxTries = 10000;
-        Random random = new Random();
+        int maxTries = 100;
+        Random random = new Random(4711); // SEED zum nachvollziehen
         List<List<Vertex>> bestlayersSoFar = cloneLayers();
 
         while(maxTries > 0  && crossCount > 0) {
             List<Integer> layerWithCrossings =  getCrossingEdges().stream().map(e -> e.target).map(this::getPosition).map(p -> p.layer)
                     .distinct().sorted().collect(Collectors.toList());
             for (Integer i: layerWithCrossings) {
-                Collections.shuffle(layers.get(i-1)); // Java 0 based
+                Collections.shuffle(layers.get(i-1),random); // Java 0 based
                 int newCrossCount = getCrossingEdges().size();
+                if(newCrossCount == 0) {
+                    return this;
+                }
                 if (newCrossCount <= crossCount) {
                     crossCount = newCrossCount;
                     bestlayersSoFar = cloneLayers();
