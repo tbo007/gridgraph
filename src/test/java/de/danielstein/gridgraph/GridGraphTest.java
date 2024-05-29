@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class GridGraphTest {
 
@@ -40,6 +44,7 @@ public class GridGraphTest {
                 .addEdge(v.get(4),v.get(6)).addEdge(v.get(5), v.get(6))
                 .addEdge(v.get(1),v.get(5));
         return graph;
+
     }
 
     @Test
@@ -97,9 +102,8 @@ public class GridGraphTest {
     @Test
     void getCrossingEdges() {
         GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
-        System.out.println(graph.getCrossingEdges());
+        //System.out.println(graph.getCrossingEdges());
         assertEquals(1, graph.getCrossingEdges().size());
-
     }
 
     @Test
@@ -111,5 +115,23 @@ public class GridGraphTest {
         Vertex fakeVertex = graph.get(5, 1);
         assertTrue(fakeVertex.isFake());
     }
+
+//    @Test
+//    void clone10k () {
+//        GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
+//        Supplier<GridGraph<?>> s = () -> {
+//            GridGraph<String> clone = graph.clone();
+//            clone.mutate();
+//            Collection<Edge> crossingEdges = clone.getCrossingEdges();
+//            return clone;
+//        };
+//
+////        List<? extends GridGraph<?>> collect = IntStream.rangeClosed(1, 10000).boxed().map(i -> s.get()).collect(Collectors.toList());
+////        System.out.println(collect.size());
+//        List<CompletableFuture<GridGraph<?>>> cfs = IntStream.rangeClosed(1, 100000).boxed().
+//                map(i -> CompletableFuture.supplyAsync(s)).collect(Collectors.toList());
+//        List<GridGraph<?>> graphs = cfs.stream().map(CompletableFuture::join).collect(Collectors.toList());
+//        System.out.println(graphs.size());
+//    }
 }
 

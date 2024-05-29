@@ -34,6 +34,13 @@ public class Vertex {
         return domainObj == null;
     }
 
+    /** Wenn ein Knoten mehr als eine eingehende oder ausgehende Verbindung hat, kann er gar nicht ohne lineSwitch positioniert
+     * werden
+     */
+    public boolean isLineSwitchEssential () {
+        return sourceConnections.size() > 1 || targetConnections.size() > 1;
+    }
+
 
 
     @Override

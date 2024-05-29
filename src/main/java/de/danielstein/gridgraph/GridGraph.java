@@ -13,12 +13,16 @@ import java.util.stream.Collectors;
  */
 public class GridGraph<T> {
 
-    private int vertexNumber = 0;
+    int vertexNumber = 0;
+
+    double fitness = -1;
+
+
 
     // LinkedHashMap: Vertexe in der Reihenfolge des Hinzufügens verarbeiten
-    final Map<T,Vertex> domainObj2Vertex = new LinkedHashMap<>();
+    Map<T,Vertex> domainObj2Vertex = new LinkedHashMap<>();
 
-    final Collection<Vertex> fakeVertexes = new ArrayList<>();
+    Collection<Vertex> fakeVertexes = new ArrayList<>();
 
     List<List<Vertex>> layers = new ArrayList<>();
 
@@ -150,13 +154,7 @@ public class GridGraph<T> {
             }
         }
         );
-
       return retval;
-
-
-
-
-
     }
 
     public GridGraph<T> layout() {
@@ -189,6 +187,50 @@ public class GridGraph<T> {
         return this;
     }
 
+
+    // -- Genetic -- //
+    public GridGraph<T> clone(){
+        GridGraph<T> graph = new GridGraph<>();
+        graph.vertexNumber = vertexNumber;
+        graph.fakeVertexes = fakeVertexes;
+        graph.domainObj2Vertex =  domainObj2Vertex;
+        graph.layers = cloneLayers();
+        graph.fitness = fitness;
+        return graph;
+    }
+
+    /** Sucht sich random einen Layer und shuffelt diesen */
+    public void mutate() {
+        Random random = new Random();
+        int i = random.nextInt(layers.size());
+        List<Vertex> rows = layers.get(i);
+        Collections.shuffle(rows,random);
+    }
+
+    /** Die Fitness berexhnet sich aus der Anzahl der Crossings und der Linesswitches.
+     * Wobei Crossings stärker negativ gewertet werden als Lineswitches*/
+    public void calculateFitness(){
+        List<Edge> sourceEdges = getSourceEdges();
+        double edgeCount = sourceEdges.size();
+        double crossingCount = getCrossingEdges().size();
+        double lineSwitches = sourceEdges.stream().map(edge -> {
+            Position sourcePos = getPosition(edge.source);
+            Position targetPos = getPosition(edge.target);
+            if (edge.source.isLineSwitchEssential() || edge.target.isLineSwitchEssential()) {
+                return 0;
+            }
+            if (sourcePos.row != targetPos.row) {
+                return 1;
+            }
+            return 0;
+        }).reduce(0, Integer::sum);
+        fitness =  (edgeCount-crossingCount)/edgeCount*0.7d + (edgeCount-lineSwitches)/edgeCount*0.3d;
+    }
+
+    public double getFitness() {
+        return fitness;
+    }
+
     //--- UtiMethods ---//
     List<List<Vertex>> cloneLayers() {
         List<List<Vertex>> clone = new ArrayList<>(layers.size());
@@ -197,8 +239,6 @@ public class GridGraph<T> {
         });
         return clone;
     }
-
-
 
     List<Edge> getSourceEdges() {
         List<Edge> sourceEdges = layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
@@ -284,13 +324,14 @@ public class GridGraph<T> {
 
     void ensureRowPresent(int layer, int row) {
         int layerNeeded = layer - layers.size();
-        for (int i = layerNeeded; i >0 ; i--) {
+        for (int i = layerNeeded; i > 0; i--) {
             layers.add(new ArrayList<>());
         }
-        List<Vertex> rows = layers.get(layer - 1);// java 0 based
-        int rowsNeeded = row - rows.size();
-        for (int i = rowsNeeded; i >0 ; i--) {
-            rows.add(null);
+        for (List<Vertex> rows : layers) {
+            int rowsNeeded = row - rows.size();
+            for (int i = rowsNeeded; i > 0; i--) {
+                rows.add(null);
+            }
         }
     }
 
