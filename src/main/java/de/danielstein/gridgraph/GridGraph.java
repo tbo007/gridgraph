@@ -15,7 +15,7 @@ public class GridGraph<T> {
 
     int vertexNumber = 0;
 
-    double fitness = -1;
+    double fitness = 0;
 
 
 
@@ -133,11 +133,11 @@ public class GridGraph<T> {
             Position pa1 = getPosition(edge.source);
             Position pb1 = getPosition(edge.target);
             if(pa1.isSmallerRow(pb1)) {
-               return getAboveRows(pa1.layer, pa1.row).stream().flatMap(v -> v.sourceConnections.stream())
+               return getAboveRows(pa1.layer, pa1.row).stream().filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream())
                         .map(e -> e.target).map(this::getPosition).
                        anyMatch((pb1::isGreaterRow));
             }   if(pa1.isGreaterRow(pb1)) {
-               return getBelowRows(pa1.layer, pa1.row).stream().flatMap(v -> v.sourceConnections.stream())
+               return getBelowRows(pa1.layer, pa1.row).stream().filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream())
                         .map(e -> e.target).map(this::getPosition).
                        anyMatch((pb1::isSmallerRow));
             }
@@ -231,6 +231,16 @@ public class GridGraph<T> {
         return fitness;
     }
 
+    public GridGraph<?> crossover(GridGraph<?> other) {
+        GridGraph<T> clone = clone();
+        for (int i = 0; i < layers.size(); i++) {
+            if(i%2 == 0) {
+                clone.layers.set(i, new ArrayList<>(other.layers.get(i)));
+            }
+        }
+        return clone;
+    }
+
     //--- UtiMethods ---//
     List<List<Vertex>> cloneLayers() {
         List<List<Vertex>> clone = new ArrayList<>(layers.size());
@@ -267,7 +277,20 @@ public class GridGraph<T> {
     void add(int layer, Vertex v) {
         ensureRowPresent(layer,0);
         List<Vertex> rows = layers.get(layer - 1);// java 0 based
-        rows.add(v);
+        int index_first_null =-1;
+        for (int i = 0; i < rows.size(); i++) {
+            Vertex vertex = rows.get(i);
+            if(vertex == null) {
+                index_first_null = i;
+                break;
+            }
+        }
+        if (index_first_null == -1) {
+            rows.add(v);
+            ensureRowPresent(layer,rows.size());
+        } else {
+            set(layer,index_first_null,v);
+        }
     }
 
     /**
@@ -356,5 +379,23 @@ public class GridGraph<T> {
 
     } Vertex newVertex(T obj,int layer, int row) {
         return new PreCordinateVertex(obj,++vertexNumber,layer,row);
+    }
+
+    @Override
+    public String toString() {
+        int layer = 1;
+        StringBuilder sb = new StringBuilder();
+        for (List<Vertex> row: layers) {
+            sb.append("L"+layer+"\n");
+            layer++;
+            for (int i = 0; i < row.size(); i++) {
+                Vertex v = row.get(i);
+                if(v != null) {
+                    sb.append(i+1 +"|->" + v + "\n");
+                }
+            }
+
+        }
+        return sb.toString();
     }
 }

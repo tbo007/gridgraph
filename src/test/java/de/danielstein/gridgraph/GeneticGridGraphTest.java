@@ -3,32 +3,19 @@ package de.danielstein.gridgraph;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GeneticGridGraphTest {
+class GeneticGridGraphTest extends  AbstractTest{
 
 
-    /**
-     * START + SAVE x INFO  + ENDE
-     *       + DBVA x FREL  +
-     *
-     *       SAVE --> FREL
-     *       DBVA --> INFO
-     *
-     *       Erwartet: 2 Crossings / 2 Lineswitches
-     */
-    private GridGraph<String> generateCrossedPlan() {
-        //                                0        1       2       3      4       5
-        List<String> v = Arrays.asList("start", "save", "info", "dbva", "frel", "ende");
-        GridGraph<String>  graph = new GridGraph<>();
-        v.forEach(graph::addVertex);
-        graph.addEdge(v.get(0),v.get(1)).addEdge(v.get(0),v.get(3)).addEdge(v.get(1),v.get(4)).addEdge(v.get(3),v.get(2))
-                .addEdge(v.get(2),v.get(5)).addEdge(v.get(4),v.get(5));
 
-        return graph;
-    }
     @Test
     void getCrossingEdges2() {
         GridGraph<String> graph = generateCrossedPlan().layering().addFakeVertexes();
@@ -40,5 +27,50 @@ class GeneticGridGraphTest {
         GridGraph<String> graph = generateCrossedPlan().layering().addFakeVertexes();
         graph.calculateFitness();
         assertEquals(0.66d,graph.getFitness(),0.01d);
+    }
+
+    @Test
+    void clone10k () {
+        GridGraph<String> graph = generateCrossedPlan().layering().addFakeVertexes();
+        Supplier<GridGraph<?>> s = () -> {
+            GridGraph<String> clone = graph.clone();
+            clone.mutate();
+            clone.calculateFitness();
+            return clone;
+        };
+
+//        List<? extends GridGraph<?>> collect = IntStream.rangeClosed(1, 10000).boxed().map(i -> s.get()).collect(Collectors.toList());
+//        System.out.println(collect.size());
+        List<CompletableFuture<GridGraph<?>>> cfs = IntStream.rangeClosed(1, 10000000).boxed().
+                map(i -> CompletableFuture.supplyAsync(s)).collect(Collectors.toList());
+        List<GridGraph<?>> graphs = cfs.stream().map(CompletableFuture::join).collect(Collectors.toList());
+        System.out.println(graphs.size());
+    }
+
+    @Test
+    public void layout(){
+        GridGraph<String> graph = generateCrossedPlan().layering().addFakeVertexes();
+        GeneticLayout gl = new GeneticLayout(graph);
+        GridGraph<?> layouted = gl.layout();
+    }  @Test
+    public void layout2(){
+        GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
+        GeneticLayout gl = new GeneticLayout(graph);
+        GridGraph<?> layouted = gl.layout();
+        System.out.println(layouted);
+    }
+
+    @Test
+    public void layout3(){
+        GridGraph<Integer> graph = complexJPL().layering().addFakeVertexes();
+        GeneticLayout gl = new GeneticLayout(graph);
+        GridGraph<?> layouted = gl.layout();
+        System.out.println(layouted);
+    }
+
+    @Test
+    public void gentest(){
+        GridGraph<Integer> graph = complexJPL().layering().addFakeVertexes();
+        System.out.println(graph);
     }
 }

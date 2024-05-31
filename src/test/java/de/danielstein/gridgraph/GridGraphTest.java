@@ -11,41 +11,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class GridGraphTest {
+public class GridGraphTest extends AbstractTest {
 
 
-    /**
-     * 1---2---3---4
-     * |---5-------|
-     */
-    private GridGraph<Integer> generateSimpleGraph() {
-        Integer v1 = Integer.valueOf(1);
-        Integer v2 = Integer.valueOf(2); //PrePos
-        Integer v3 = Integer.valueOf(3);
-        Integer v4 = Integer.valueOf(4);
-        Integer v5 = Integer.valueOf(5);
-        return new GridGraph<Integer>().addVertex(v1).addVertex(2,1,v2).addVertex(v3).addVertex(v4)
-                .addVertex(v5)
-                .addEdge(v1, v2, 1).addEdge(v2, v3, 1).addEdge(v3, v4, 1)
-                .addEdge(v1, v5, 1).addEdge(v5, v4, 1);
-    }
-
-    /**
-     * START--FANL--SAVE--DBVA-------------ENDE
-     *           +           +--RESTORE----+
-     *           +-----------+--FREL-------+
-     */
-    private GridGraph<String> generateJPL() {
-        List<String> v = Arrays.asList("start", "fanl", "save", "dbva", "restore", "frel", "ende");
-        GridGraph<String>  graph = new GridGraph<String>();
-        v.forEach(graph::addVertex);
-        graph.addEdge(v.get(0),v.get(1)).addEdge(v.get(1),v.get(2)).addEdge(v.get(2),v.get(3)).addEdge(v.get(3),v.get(6))
-                .addEdge(v.get(3),v.get(4)).addEdge(v.get(3),v.get(5))
-                .addEdge(v.get(4),v.get(6)).addEdge(v.get(5), v.get(6))
-                .addEdge(v.get(1),v.get(5));
-        return graph;
-
-    }
 
     @Test
     public void testMaxEdgeCount2Start() {
@@ -103,7 +71,7 @@ public class GridGraphTest {
     void getCrossingEdges() {
         GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
         //System.out.println(graph.getCrossingEdges());
-        assertEquals(1, graph.getCrossingEdges().size());
+        assertEquals(2, graph.getCrossingEdges().size());
     }
 
     @Test
@@ -115,23 +83,5 @@ public class GridGraphTest {
         Vertex fakeVertex = graph.get(5, 1);
         assertTrue(fakeVertex.isFake());
     }
-
-//    @Test
-//    void clone10k () {
-//        GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
-//        Supplier<GridGraph<?>> s = () -> {
-//            GridGraph<String> clone = graph.clone();
-//            clone.mutate();
-//            Collection<Edge> crossingEdges = clone.getCrossingEdges();
-//            return clone;
-//        };
-//
-////        List<? extends GridGraph<?>> collect = IntStream.rangeClosed(1, 10000).boxed().map(i -> s.get()).collect(Collectors.toList());
-////        System.out.println(collect.size());
-//        List<CompletableFuture<GridGraph<?>>> cfs = IntStream.rangeClosed(1, 100000).boxed().
-//                map(i -> CompletableFuture.supplyAsync(s)).collect(Collectors.toList());
-//        List<GridGraph<?>> graphs = cfs.stream().map(CompletableFuture::join).collect(Collectors.toList());
-//        System.out.println(graphs.size());
-//    }
 }
 

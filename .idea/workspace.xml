@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Layout Optimierung">
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Entwicklung Util-Methodes Genetic Algo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -58,8 +58,8 @@
       <recent name="de.danielstein.gridgraph" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GeneticGridGraphTest.getCrossingEdges2">
-    <configuration name="GeneticGridGraphTest.calculateFitness" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.GeneticGridGraphTest.gentest">
+    <configuration name="GeneticGridGraphTest.gentest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -69,13 +69,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
-      <option name="METHOD_NAME" value="calculateFitness" />
+      <option name="METHOD_NAME" value="gentest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GeneticGridGraphTest.getCrossingEdges2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneticGridGraphTest.layout" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -85,7 +85,39 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
-      <option name="METHOD_NAME" value="getCrossingEdges2" />
+      <option name="METHOD_NAME" value="layout" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GeneticGridGraphTest.layout2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
+      <option name="METHOD_NAME" value="layout2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GeneticGridGraphTest.layout3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
+      <option name="METHOD_NAME" value="layout3" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -106,45 +138,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.getCrossingEdges" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="getCrossingEdges" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GridGraphTest.getCrossingEdges2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="getCrossingEdges2" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GeneticGridGraphTest.getCrossingEdges2" />
-        <item itemvalue="JUnit.GeneticGridGraphTest.calculateFitness" />
+        <item itemvalue="JUnit.GeneticGridGraphTest.gentest" />
         <item itemvalue="JUnit.GridGraphTest" />
-        <item itemvalue="JUnit.GridGraphTest.getCrossingEdges2" />
-        <item itemvalue="JUnit.GridGraphTest.getCrossingEdges" />
+        <item itemvalue="JUnit.GeneticGridGraphTest.layout3" />
+        <item itemvalue="JUnit.GeneticGridGraphTest.layout2" />
+        <item itemvalue="JUnit.GeneticGridGraphTest.layout" />
       </list>
     </recent_temporary>
   </component>
@@ -253,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716274815707</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Entwicklung Util-Methodes Genetic Algo">
+      <option name="closed" value="true" />
+      <created>1717001705231</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1717001705231</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -277,21 +285,37 @@
     <MESSAGE value="Entw. Crossing Detect" />
     <MESSAGE value="Erster kompletter Durchstich !" />
     <MESSAGE value="Layout Optimierung" />
-    <option name="LAST_COMMIT_MESSAGE" value="Layout Optimierung" />
+    <MESSAGE value="Entwicklung Util-Methodes Genetic Algo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Entwicklung Util-Methodes Genetic Algo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
-          <line>133</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
-          <line>105</line>
+          <line>73</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="row &gt; 5" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
+          <line>348</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="7" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
