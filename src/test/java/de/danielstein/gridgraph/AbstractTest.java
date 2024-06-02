@@ -62,7 +62,7 @@ public abstract class AbstractTest {
 
 
     /** Beispiel aus Obsidian Note 14b503*/
-    GridGraph<Integer> complexJPL() {
+    GridGraph<Integer> generateComplexJPL() {
 
         GridGraph<Integer>  graph = new GridGraph<Integer>();
         IntStream.rangeClosed(1,16).boxed().forEach(graph::addVertex);

@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Entwicklung Util-Methodes Genetic Algo">
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="Genetic Algo Entw">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AbstractTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AbstractTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
@@ -58,39 +60,7 @@
       <recent name="de.danielstein.gridgraph" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GeneticGridGraphTest.gentest">
-    <configuration name="GeneticGridGraphTest.gentest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
-      <option name="METHOD_NAME" value="gentest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GeneticGridGraphTest.layout" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
-      <option name="METHOD_NAME" value="layout" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.gridgraph in GridGraph">
     <configuration name="GeneticGridGraphTest.layout2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -138,13 +108,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GridGraphTest.allColumnsEqualRowCount" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
+      <option name="METHOD_NAME" value="allColumnsEqualRowCount" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="gridgraph in GridGraph" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GeneticGridGraphTest.gentest" />
-        <item itemvalue="JUnit.GridGraphTest" />
-        <item itemvalue="JUnit.GeneticGridGraphTest.layout3" />
+        <item itemvalue="JUnit.gridgraph in GridGraph" />
         <item itemvalue="JUnit.GeneticGridGraphTest.layout2" />
-        <item itemvalue="JUnit.GeneticGridGraphTest.layout" />
+        <item itemvalue="JUnit.GeneticGridGraphTest.layout3" />
+        <item itemvalue="JUnit.GridGraphTest.allColumnsEqualRowCount" />
+        <item itemvalue="JUnit.GridGraphTest" />
       </list>
     </recent_temporary>
   </component>
@@ -261,7 +255,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717001705231</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Genetic Algo Entw">
+      <option name="closed" value="true" />
+      <created>1717156668758</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1717156668758</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -286,7 +288,8 @@
     <MESSAGE value="Erster kompletter Durchstich !" />
     <MESSAGE value="Layout Optimierung" />
     <MESSAGE value="Entwicklung Util-Methodes Genetic Algo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Entwicklung Util-Methodes Genetic Algo" />
+    <MESSAGE value="Genetic Algo Entw" />
+    <option name="LAST_COMMIT_MESSAGE" value="Genetic Algo Entw" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -297,20 +300,20 @@
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java</url>
-          <line>31</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="row &gt; 5" language="JAVA" />
+          <condition expression="row &gt;=4" language="JAVA" />
           <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
-          <line>348</line>
-          <option name="timeStamp" value="22" />
+          <line>337</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
+          <line>79</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="29" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.NullPointerException" package="java.lang" />

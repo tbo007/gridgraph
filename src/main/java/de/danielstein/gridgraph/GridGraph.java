@@ -202,9 +202,9 @@ public class GridGraph<T> {
     /** Sucht sich random einen Layer und shuffelt diesen */
     public void mutate() {
         Random random = new Random();
-        int i = random.nextInt(layers.size());
-        List<Vertex> rows = layers.get(i);
-        Collections.shuffle(rows,random);
+        for (List<?> rows : layers) {
+            Collections.shuffle(rows,random);
+        }
     }
 
     /** Die Fitness berexhnet sich aus der Anzahl der Crossings und der Linesswitches.
@@ -216,13 +216,14 @@ public class GridGraph<T> {
         double lineSwitches = sourceEdges.stream().map(edge -> {
             Position sourcePos = getPosition(edge.source);
             Position targetPos = getPosition(edge.target);
-            if (edge.source.isLineSwitchEssential() || edge.target.isLineSwitchEssential()) {
-                return 0;
-            }
-            if (sourcePos.row != targetPos.row) {
-                return 1;
-            }
-            return 0;
+//            if (edge.source.isLineSwitchEssential() || edge.target.isLineSwitchEssential()) {
+//                return 0;
+//            }
+//            if (sourcePos.row != targetPos.row) {
+//                return 1;
+//            }
+//            return 0;
+            return sourcePos.row != targetPos.row ? 1 : 0;
         }).reduce(0, Integer::sum);
         fitness =  (edgeCount-crossingCount)/edgeCount*0.7d + (edgeCount-lineSwitches)/edgeCount*0.3d;
     }
@@ -232,10 +233,11 @@ public class GridGraph<T> {
     }
 
     public GridGraph<?> crossover(GridGraph<?> other) {
-        GridGraph<T> clone = clone();
-        for (int i = 0; i < layers.size(); i++) {
+        GridGraph<?> clone = clone();
+        GridGraph<?> otherclone = other.clone();
+        for (int i = 0; i < clone.layers.size(); i++) {
             if(i%2 == 0) {
-                clone.layers.set(i, new ArrayList<>(other.layers.get(i)));
+                clone.layers.set(i, otherclone.layers.get(i));
             }
         }
         return clone;
@@ -275,27 +277,13 @@ public class GridGraph<T> {
     }
 
     void add(int layer, Vertex v) {
-        ensureRowPresent(layer,0);
+        int row = ensureNextFreeRow(layer);
         List<Vertex> rows = layers.get(layer - 1);// java 0 based
-        int index_first_null =-1;
-        for (int i = 0; i < rows.size(); i++) {
-            Vertex vertex = rows.get(i);
-            if(vertex == null) {
-                index_first_null = i;
-                break;
-            }
-        }
-        if (index_first_null == -1) {
-            rows.add(v);
-            ensureRowPresent(layer,rows.size());
-        } else {
-            set(layer,index_first_null,v);
-        }
+        rows.set(row-1, v);
     }
 
     /**
-     * Setzt den Vertx an der gegdeben Position. WEnn dort schon ein Elment ist, werden dieses und alle anderen
-     * eins weitergeschoben
+     * Setzt den Vertx an der gegebenen Position. Wenn dort schon ein Element ist, wird dieses an die nächst freie Stelle im Layer eingefügt
      * @param layer
      * @param row
      * @param v
@@ -303,13 +291,12 @@ public class GridGraph<T> {
     void set(int layer, int row, Vertex v) {
         ensureRowPresent(layer,row);
         List<Vertex> rows = layers.get(layer - 1);// java 0 based
-        row-=1;// java 0 based
-        Vertex vertex = rows.get(row);
-        if(vertex == null) {
-            rows.set(row,v);
-        } else {
-            rows.add(row,v);
+        Vertex prev = rows.set(row -= 1, v);// java 0 based)
+        if(prev != null) {
+            add(layer,prev);
         }
+
+
     }
 
     Vertex get(int layer, int row) {
@@ -345,11 +332,35 @@ public class GridGraph<T> {
         return retVal;
     }
 
+
+    /** 1 based Index **/
     void ensureRowPresent(int layer, int row) {
         int layerNeeded = layer - layers.size();
         for (int i = layerNeeded; i > 0; i--) {
             layers.add(new ArrayList<>());
         }
+        ensureAllLayersHaveAtLeast(row);
+    }
+
+    /** 1 based Index **/
+    int ensureNextFreeRow(int layer) {
+        int layerNeeded = layer - layers.size();
+        for (int i = layerNeeded; i > 0; i--) {
+            layers.add(new ArrayList<>());
+        }
+        List<Vertex> rows = layers.get(layer - 1);
+        for (int i = 0; i < rows.size(); i++) {
+            if(rows.get(i) == null) {
+                return i+1;
+            }
+        }
+        int nextFreeRow = rows.size()+1;
+        ensureAllLayersHaveAtLeast(nextFreeRow);
+        return nextFreeRow;
+    }
+
+    /** 1 based Index **/
+    private void ensureAllLayersHaveAtLeast(int row) {
         for (List<Vertex> rows : layers) {
             int rowsNeeded = row - rows.size();
             for (int i = rowsNeeded; i > 0; i--) {

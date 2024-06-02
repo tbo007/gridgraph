@@ -75,6 +75,13 @@ public class GridGraphTest extends AbstractTest {
     }
 
     @Test
+    void allColumnsEqualRowCount() {
+        GridGraph<?> graph = generateComplexJPL().layering().addFakeVertexes();
+        assertEquals(1L, graph.layers.stream().map(List::size).distinct().count());
+
+    }
+
+    @Test
     void layout () {
         GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
         Assumptions.assumeFalse(graph.getCrossingEdges().isEmpty());

@@ -13,7 +13,7 @@ public class GeneticLayout {
 
     private final Comparator<GridGraph<?>> FITNESS_COMP;
 
-    public static final int INIT_GENERATION_SIZE = 10000;
+    public static final int INIT_GENERATION_SIZE = 100000;
     public static final int GENERATION_SIZE = 1000;
     public static final int GENERATION_COUNT = 100;
     public static final int ELITISM_PERCENT = 1;
@@ -30,7 +30,7 @@ public class GeneticLayout {
     public GridGraph<?> layout() {
         List<GridGraph<?>>  generation = initGeneration();
         generation.sort(FITNESS_COMP);
-        System.out.println("INIT COMPLETE");
+        System.out.println("INIT COMPLETE Fittest: " + generation.get(0).getFitness());
         generation = new ArrayList<>(generation.subList(0,GENERATION_SIZE));
 
         int genCount = GENERATION_COUNT -1;

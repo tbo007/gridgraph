@@ -2,8 +2,6 @@ package de.danielstein.gridgraph;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -57,20 +55,20 @@ class GeneticGridGraphTest extends  AbstractTest{
         GridGraph<String> graph = generateJPL().layering().addFakeVertexes();
         GeneticLayout gl = new GeneticLayout(graph);
         GridGraph<?> layouted = gl.layout();
-        System.out.println(layouted);
+        System.out.println(new GridPrinter(layouted).getGridAsString());
     }
 
     @Test
     public void layout3(){
-        GridGraph<Integer> graph = complexJPL().layering().addFakeVertexes();
+        GridGraph<Integer> graph = generateComplexJPL().layering().addFakeVertexes();
         GeneticLayout gl = new GeneticLayout(graph);
         GridGraph<?> layouted = gl.layout();
-        System.out.println(layouted);
+        System.out.println(new GridPrinter(layouted).getGridAsString());
     }
 
     @Test
     public void gentest(){
-        GridGraph<Integer> graph = complexJPL().layering().addFakeVertexes();
+        GridGraph<Integer> graph = generateComplexJPL().layering().addFakeVertexes();
         System.out.println(graph);
     }
 }
