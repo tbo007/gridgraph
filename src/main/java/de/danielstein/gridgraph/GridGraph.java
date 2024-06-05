@@ -15,7 +15,9 @@ public class GridGraph<T> {
 
     int vertexNumber = 0;
 
-    double fitness = 0;
+    int crossings = 0;
+
+    int lineSwitches = 0;
 
 
 
@@ -132,7 +134,11 @@ public class GridGraph<T> {
         Collection<Edge> retval = getSourceEdges().stream().filter(edge -> {
             Position pa1 = getPosition(edge.source);
             Position pb1 = getPosition(edge.target);
-            if(pa1.isSmallerRow(pb1)) {
+            if(pb1 == null) {
+                System.out.println("NULL");
+            }
+
+                if(pa1.isSmallerRow(pb1)) {
                return getAboveRows(pa1.layer, pa1.row).stream().filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream())
                         .map(e -> e.target).map(this::getPosition).
                        anyMatch((pb1::isGreaterRow));
@@ -195,7 +201,8 @@ public class GridGraph<T> {
         graph.fakeVertexes = fakeVertexes;
         graph.domainObj2Vertex =  domainObj2Vertex;
         graph.layers = cloneLayers();
-        graph.fitness = fitness;
+        graph.lineSwitches = lineSwitches;
+        graph.crossings = crossings;
         return graph;
     }
 
@@ -209,27 +216,14 @@ public class GridGraph<T> {
 
     /** Die Fitness berexhnet sich aus der Anzahl der Crossings und der Linesswitches.
      * Wobei Crossings stärker negativ gewertet werden als Lineswitches*/
-    public void calculateFitness(){
+    public void calculateFitnessFactors(){
         List<Edge> sourceEdges = getSourceEdges();
-        double edgeCount = sourceEdges.size();
-        double crossingCount = getCrossingEdges().size();
-        double lineSwitches = sourceEdges.stream().map(edge -> {
+        crossings = getCrossingEdges().size();
+        lineSwitches = sourceEdges.stream().map(edge -> {
             Position sourcePos = getPosition(edge.source);
             Position targetPos = getPosition(edge.target);
-//            if (edge.source.isLineSwitchEssential() || edge.target.isLineSwitchEssential()) {
-//                return 0;
-//            }
-//            if (sourcePos.row != targetPos.row) {
-//                return 1;
-//            }
-//            return 0;
             return sourcePos.row != targetPos.row ? 1 : 0;
         }).reduce(0, Integer::sum);
-        fitness =  (edgeCount-crossingCount)/edgeCount*0.7d + (edgeCount-lineSwitches)/edgeCount*0.3d;
-    }
-
-    public double getFitness() {
-        return fitness;
     }
 
     public GridGraph<?> crossover(GridGraph<?> other) {
@@ -266,6 +260,7 @@ public class GridGraph<T> {
                 return new Position(i + 1, row + 1); // Java 0 based
             }
         }
+        System.out.println(vertex + " null \n" + toString() );
         return null;
     }
 

@@ -13,30 +13,34 @@ public class GeneticLayout {
 
     private final Comparator<GridGraph<?>> FITNESS_COMP;
 
-    public static final int INIT_GENERATION_SIZE = 100000;
-    public static final int GENERATION_SIZE = 1000;
-    public static final int GENERATION_COUNT = 100;
+    public static final int INIT_GENERATION_SIZE = 10000;
+    public static final int GENERATION_SIZE = 100;
+    public static final int GENERATION_COUNT = 10000;
     public static final int ELITISM_PERCENT = 1;
-    public static final int MUTATION_PERCENT = 1;
+    public static final int MUTATION_PERCENT = 10;
     private final  GridGraph<?> startGraph;
 
     public GeneticLayout(GridGraph<?> startGraph) {
         this.startGraph = startGraph;
         FITNESS_COMP = (o1, o2) -> {
-            return Double.compare(o2.getFitness(), o1.getFitness());
+            int crossCompare = Integer.compare(o1.crossings, o2.crossings);
+            if(crossCompare == 0) {
+                return Integer.compare(o1.lineSwitches, o2.lineSwitches);
+            }
+            return crossCompare;
         };
     }
 
     public GridGraph<?> layout() {
         List<GridGraph<?>>  generation = initGeneration();
         generation.sort(FITNESS_COMP);
-        System.out.println("INIT COMPLETE Fittest: " + generation.get(0).getFitness());
+        System.out.println("INIT COMPLETE Fittest: lc: " + generation.get(0).crossings + " / ls: " + generation.get(0).lineSwitches);
         generation = new ArrayList<>(generation.subList(0,GENERATION_SIZE));
 
         int genCount = GENERATION_COUNT -1;
         while (genCount > 0) {
             generation = breadNewGeneration(generation);
-            System.out.println("Gen: Fittest: " + generation.get(0).getFitness());
+            System.out.println("Gen: Fittest: lc: " + generation.get(0).crossings + " / ls: " + generation.get(0).lineSwitches);
             genCount--;
         }
         return generation.get(0);
@@ -85,7 +89,7 @@ public class GeneticLayout {
         return () -> {
             GridGraph<?> mutate =  clone ? graph.clone(): graph;
             mutate.mutate();
-            mutate.calculateFitness();
+            mutate.calculateFitnessFactors();
             return mutate;
         };
     }
@@ -93,7 +97,7 @@ public class GeneticLayout {
     private Supplier<GridGraph<?>> crossover(GridGraph<?> a , GridGraph<?> b) {
         return () -> {
             GridGraph<?> crossover = a.crossover(b);
-            crossover.calculateFitness();
+            crossover.calculateFitnessFactors();
             return crossover;
         };
     }

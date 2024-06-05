@@ -33,7 +33,7 @@ public class GridPrinter {
     public String getGridAsString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Fitness : " + graph.getFitness());
+        sb.append("Fitness : lc: " + graph.crossings + " / ls: " + graph.lineSwitches);
         sb.append("\n\n");
         // Bestimme die maximale Länge der Elemente
         int maxLength = getMaxElementLength();
