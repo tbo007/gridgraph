@@ -13,9 +13,9 @@ public class GeneticLayout {
 
     private final Comparator<GridGraph<?>> FITNESS_COMP;
 
-    public static final int INIT_GENERATION_SIZE = 2_000_000;
-    public static final int GENERATION_SIZE = 1_000;
-    public static final int GENERATION_COUNT = 2_000;
+    public static final int INIT_GENERATION_SIZE = 3_000_000;
+    public static final int GENERATION_SIZE = 2_000;
+    public static final int GENERATION_COUNT = 5_000;
     public static final int ELITISM_PERCENT = 1;
     public static final int MUTATION_PERCENT = 2;
     private final  GridGraph<?> startGraph;

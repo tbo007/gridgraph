@@ -50,6 +50,7 @@ class GeneticGridGraphTest extends  AbstractTest{
         GridGraph<String> graph = generateCrossedPlan().layering().addFakeVertexes();
         GeneticLayout gl = new GeneticLayout(graph);
         GridGraph<?> layouted = gl.layout();
+        System.out.println(new GridPrinter(layouted).getGridAsString());
     }  @Test
     public void layout2(){
         GridGraph<String> graph = generateJPL().layering().addFakeVertexes();

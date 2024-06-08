@@ -333,7 +333,7 @@ public class GridGraph<T> {
         for (int i = layerNeeded; i > 0; i--) {
             layers.add(new ArrayList<>());
         }
-        ensureLayerHaasAtLeast(layer,row);
+        ensureLayerHasAtLeastOneMoreThanNeeded(layer,row);
     }
 
     /** 1 based Index **/
@@ -349,14 +349,14 @@ public class GridGraph<T> {
             }
         }
         int nextFreeRow = rows.size()+1;
-        ensureLayerHaasAtLeast(layer, nextFreeRow);
+        ensureLayerHasAtLeastOneMoreThanNeeded(layer, nextFreeRow);
         return nextFreeRow;
     }
 
     /** 1 based Index **/
-    private void ensureLayerHaasAtLeast(int layer, int row) {
+    private void ensureLayerHasAtLeastOneMoreThanNeeded(int layer, int row) {
         List<Vertex> rows = layers.get(layer-1) ;
-            int rowsNeeded = row - rows.size();
+            int rowsNeeded = row+1 - rows.size();
             for (int i = rowsNeeded; i > 0; i--) {
                 rows.add(null);
             }
