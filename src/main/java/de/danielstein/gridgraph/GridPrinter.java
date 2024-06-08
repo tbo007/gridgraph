@@ -38,8 +38,8 @@ public class GridPrinter {
         // Bestimme die maximale Länge der Elemente
         int maxLength = getMaxElementLength();
 
-        // Anzahl der Zeilen ermitteln (Anzahl der Elemente in der ersten Spalte)
-        int numberOfRows = graph.layers.get(0).size();
+        // Anzahl der maximalen Zeilen ermitteln
+        int numberOfRows = graph.layers.stream().map(List::size).max(Integer::compare).get();
 
         // Spaltennummern hinzufügen
         sb.append("   "); // Platz für Zeilennummern lassen
@@ -56,7 +56,9 @@ public class GridPrinter {
             // Durch jede Spalte iterieren
             for (List<Vertex> column : graph.layers) {
                 // Element der aktuellen Zeile und Spalte hinzufügen
-                sb.append(String.format("%" + maxLength + "s ", vertex2Text(column.get(row))));
+                Vertex vertex = column.size() > row ? column.get(row) : null;
+
+                sb.append(String.format("%" + maxLength + "s ", vertex2Text(vertex)));
             }
             // Nach jeder Zeile einen Zeilenumbruch hinzufügen
             sb.append("\n");

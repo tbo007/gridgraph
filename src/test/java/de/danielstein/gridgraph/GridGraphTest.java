@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -75,9 +76,16 @@ public class GridGraphTest extends AbstractTest {
     }
 
     @Test
-    void allColumnsEqualRowCount() {
+    void allLayersEqualRowCount() {
         GridGraph<?> graph = generateComplexJPL().layering().addFakeVertexes();
         assertEquals(1L, graph.layers.stream().map(List::size).distinct().count());
+
+    }
+
+    @Test
+    void atLeastOneLayerWithNonNullRow() {
+        GridGraph<?> graph = generateComplexJPL().layering().addFakeVertexes();
+        assertEquals(1L, graph.layers.stream().filter(l -> l.contains(null)).count());
 
     }
 

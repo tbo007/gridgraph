@@ -260,7 +260,6 @@ public class GridGraph<T> {
                 return new Position(i + 1, row + 1); // Java 0 based
             }
         }
-        System.out.println(vertex + " null \n" + toString() );
         return null;
     }
 
@@ -334,7 +333,7 @@ public class GridGraph<T> {
         for (int i = layerNeeded; i > 0; i--) {
             layers.add(new ArrayList<>());
         }
-        ensureAllLayersHaveAtLeast(row);
+        ensureLayerHaasAtLeast(layer,row);
     }
 
     /** 1 based Index **/
@@ -350,18 +349,18 @@ public class GridGraph<T> {
             }
         }
         int nextFreeRow = rows.size()+1;
-        ensureAllLayersHaveAtLeast(nextFreeRow);
+        ensureLayerHaasAtLeast(layer, nextFreeRow);
         return nextFreeRow;
     }
 
     /** 1 based Index **/
-    private void ensureAllLayersHaveAtLeast(int row) {
-        for (List<Vertex> rows : layers) {
+    private void ensureLayerHaasAtLeast(int layer, int row) {
+        List<Vertex> rows = layers.get(layer-1) ;
             int rowsNeeded = row - rows.size();
             for (int i = rowsNeeded; i > 0; i--) {
                 rows.add(null);
             }
-        }
+
     }
 
     int maxEdgeCount2Start(Vertex v) {
@@ -389,19 +388,8 @@ public class GridGraph<T> {
 
     @Override
     public String toString() {
-        int layer = 1;
-        StringBuilder sb = new StringBuilder();
-        for (List<Vertex> row: layers) {
-            sb.append("L"+layer+"\n");
-            layer++;
-            for (int i = 0; i < row.size(); i++) {
-                Vertex v = row.get(i);
-                if(v != null) {
-                    sb.append(i+1 +"|->" + v + "\n");
-                }
-            }
-
-        }
-        return sb.toString();
+        GridPrinter gridPrinter = new GridPrinter(this);
+        return gridPrinter.getGridAsString();
     }
+
 }

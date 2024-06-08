@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="- Genetic Algo Entw&#10;- Bugfix GridGraph: Alle Layer haben nun immer gleiche Anzahl an Rows">
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="- Umbau auf Fittness Factors">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +59,7 @@
       <recent name="de.danielstein.gridgraph" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GeneticGridGraphTest.layout3">
+  <component name="RunManager" selected="JUnit.GeneticGridGraphTest.layout2">
     <configuration name="GeneticGridGraphTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -72,6 +72,22 @@
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
       <option name="METHOD_NAME" value="layout3" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GeneticGridGraphTest.gentest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GeneticGridGraphTest" />
+      <option name="METHOD_NAME" value="gentest" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -108,7 +124,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.allColumnsEqualRowCount" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GridGraphTest.atLeastOneLayerWithNonNullRow" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -118,27 +134,19 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="allColumnsEqualRowCount" />
+      <option name="METHOD_NAME" value="atLeastOneLayerWithNonNullRow" />
       <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="gridgraph in GridGraph" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GeneticGridGraphTest.layout3" />
-        <item itemvalue="JUnit.GeneticGridGraphTest" />
         <item itemvalue="JUnit.GeneticGridGraphTest.layout2" />
-        <item itemvalue="JUnit.gridgraph in GridGraph" />
-        <item itemvalue="JUnit.GridGraphTest.allColumnsEqualRowCount" />
+        <item itemvalue="JUnit.GeneticGridGraphTest.layout3" />
+        <item itemvalue="JUnit.GeneticGridGraphTest.gentest" />
+        <item itemvalue="JUnit.GridGraphTest.atLeastOneLayerWithNonNullRow" />
+        <item itemvalue="JUnit.GeneticGridGraphTest" />
       </list>
     </recent_temporary>
   </component>
@@ -271,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717327374929</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="- Umbau auf Fittness Factors">
+      <option name="closed" value="true" />
+      <created>1717597403960</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1717597403960</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -298,9 +314,32 @@
     <MESSAGE value="Entwicklung Util-Methodes Genetic Algo" />
     <MESSAGE value="Genetic Algo Entw" />
     <MESSAGE value="- Genetic Algo Entw&#10;- Bugfix GridGraph: Alle Layer haben nun immer gleiche Anzahl an Rows" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Genetic Algo Entw&#10;- Bugfix GridGraph: Alle Layer haben nun immer gleiche Anzahl an Rows" />
+    <MESSAGE value="- Umbau auf Fittness Factors" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Umbau auf Fittness Factors" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
+          <line>87</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GeneticGridGraphTest.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GeneticLayout.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="de.danielstein.gridgraph.GridGraph" memberName="layers" />
