@@ -13,9 +13,8 @@ public class GeneticLayout {
 
     private final Comparator<GridGraph<?>> FITNESS_COMP;
 
-    public static final int INIT_GENERATION_SIZE = 3_000_000;
-    public static final int GENERATION_SIZE = 2_000;
-    public static final int GENERATION_COUNT = 5_000;
+    public static final int GENERATION_SIZE = 2_500;
+    public static final int GENERATION_COUNT = 3_000;
     public static final int ELITISM_PERCENT = 1;
     public static final int MUTATION_PERCENT = 2;
     private final  GridGraph<?> startGraph;
@@ -23,11 +22,8 @@ public class GeneticLayout {
     public GeneticLayout(GridGraph<?> startGraph) {
         this.startGraph = startGraph;
         FITNESS_COMP = (o1, o2) -> {
-            int crossCompare = Integer.compare(o1.crossings, o2.crossings);
-            if(crossCompare == 0) {
-                return Integer.compare(o1.lineSwitches, o2.lineSwitches);
-            }
-            return crossCompare;
+            return Double.compare(o2.getFitness(), o1.getFitness());
+
         };
     }
 
@@ -42,10 +38,16 @@ public class GeneticLayout {
         generation = new ArrayList<>(generation.subList(0,GENERATION_SIZE));
 
         int genCount = GENERATION_COUNT -1;
+        double fittestOf100Gen = 0;
         while (genCount > 0) {
             generation = breadNewGeneration(generation);
+
             if(genCount % 100   == 0) {
                 System.out.println("Gen: " + (GENERATION_COUNT - genCount) + ": " + generationFitnessStat(generation));
+                if(Math.abs(generation.get(0).getFitness() - fittestOf100Gen) < 0.0001) {
+                    break;
+                }
+                    fittestOf100Gen = generation.get(0).getFitness();
             }
             genCount--;
         }
@@ -54,13 +56,11 @@ public class GeneticLayout {
 
     private String generationFitnessStat(List<GridGraph<?>> l) {
         StringBuilder retval = new StringBuilder();
-        retval.append("Fitness lc: ");
-        double crossings_gen = (double) l.stream().map(g -> g.crossings).collect(Collectors.summingInt(Integer::intValue)) /  (double )l.size();
-        double lineswitch_gen = (double) l.stream().map(g -> g.lineSwitches).collect(Collectors.summingInt(Integer::intValue)) /  (double )l.size();
-
-        retval.append(crossings_gen);
-        retval.append(" /ls: ");
-        retval.append(lineswitch_gen);
+        retval.append("Fitness: Overall: ");
+        double fitness_gen = (double) (Double) l.stream().map(GridGraph::getFitness).mapToDouble(Double::doubleValue).sum() /  (double )l.size();
+        retval.append(fitness_gen);
+        retval.append(" fittest: ");
+        retval.append(l.get(0).getFitness());
         return  retval.toString();
 
     }
@@ -99,7 +99,8 @@ public class GeneticLayout {
     }
 
     private List<GridGraph<?>> initGeneration () {
-        List<CompletableFuture<GridGraph<?>>> asyncComp = IntStream.rangeClosed(1, INIT_GENERATION_SIZE).boxed()
+        int initGenSize = startGraph.getSourceEdges().size()*100_000;
+        List<CompletableFuture<GridGraph<?>>> asyncComp = IntStream.rangeClosed(1, initGenSize).boxed()
                 .map(i -> CompletableFuture.supplyAsync(mutate(startGraph))).collect(Collectors.toList());
         return asyncComp.stream().map(CompletableFuture::join).collect(Collectors.toList());
     }
@@ -108,7 +109,7 @@ public class GeneticLayout {
         return () -> {
             GridGraph<?> mutate = graph.clone();
             mutate.mutate();
-            mutate.calculateFitnessFactors();
+            mutate.calculateFitness();
             return mutate;
         };
     }
@@ -116,7 +117,7 @@ public class GeneticLayout {
     private Supplier<GridGraph<?>> crossover(GridGraph<?> a , GridGraph<?> b) {
         return () -> {
             GridGraph<?> crossover = a.crossover(b);
-            crossover.calculateFitnessFactors();
+            crossover.calculateFitness();
             return crossover;
         };
     }

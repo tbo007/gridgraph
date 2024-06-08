@@ -27,13 +27,13 @@ public class GridPrinter {
     }
 
     private String vertex2Text(Vertex v) {
-        return v == null || v.domainObj == null ? " ": v.domainObj.toString();
+        return v == null ? "  ": v.isFake() ? "  " : v.domainObj.toString();
     }
 
     public String getGridAsString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Fitness : lc: " + graph.crossings + " / ls: " + graph.lineSwitches);
+        sb.append("Fitness: " +graph.getFitness());
         sb.append("\n\n");
         // Bestimme die maximale Länge der Elemente
         int maxLength = getMaxElementLength();

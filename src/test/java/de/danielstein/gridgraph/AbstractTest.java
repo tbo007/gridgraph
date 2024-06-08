@@ -75,4 +75,17 @@ public abstract class AbstractTest {
         return graph;
 
     }
+
+    /** Beispiel aus Obsidian Note kbm002*/
+    GridGraph<Integer> generateJPLkbm002() {
+
+        GridGraph<Integer>  graph = new GridGraph<Integer>();
+        IntStream.rangeClosed(1,11).boxed().forEach(graph::addVertex);
+        graph.addEdge(1,2).addEdge(2,3).addEdge(3,4).addEdge(3,10)
+                .addEdge(4,5).addEdge(4,10).addEdge(5,6).addEdge(6,7)
+                .addEdge(6,8).addEdge(6,9).addEdge(6,10).addEdge(6,11)
+                .addEdge(10,11);
+        return graph;
+
+    }
 }

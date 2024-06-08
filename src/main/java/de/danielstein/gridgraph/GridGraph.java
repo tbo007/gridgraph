@@ -15,10 +15,7 @@ public class GridGraph<T> {
 
     int vertexNumber = 0;
 
-    int crossings = 0;
-
-    int lineSwitches = 0;
-
+    double fitness = -1;
 
 
     // LinkedHashMap: Vertexe in der Reihenfolge des Hinzufügens verarbeiten
@@ -201,8 +198,7 @@ public class GridGraph<T> {
         graph.fakeVertexes = fakeVertexes;
         graph.domainObj2Vertex =  domainObj2Vertex;
         graph.layers = cloneLayers();
-        graph.lineSwitches = lineSwitches;
-        graph.crossings = crossings;
+        graph.fitness = fitness;
         return graph;
     }
 
@@ -214,16 +210,21 @@ public class GridGraph<T> {
         }
     }
 
-    /** Die Fitness berexhnet sich aus der Anzahl der Crossings und der Linesswitches.
-     * Wobei Crossings stärker negativ gewertet werden als Lineswitches*/
-    public void calculateFitnessFactors(){
+    public  double getFitness() {
+        return  fitness;
+    }
+
+    /** (edges - crossingedgges - (lineswitches/floor(edges/4))) / edges **/
+    public void calculateFitness(){
         List<Edge> sourceEdges = getSourceEdges();
-        crossings = getCrossingEdges().size();
-        lineSwitches = sourceEdges.stream().map(edge -> {
+        double edgeCount = sourceEdges.size();
+        double crossings = getCrossingEdges().size();
+        double lineSwitches = sourceEdges.stream().map(edge -> {
             Position sourcePos = getPosition(edge.source);
             Position targetPos = getPosition(edge.target);
             return sourcePos.row != targetPos.row ? 1 : 0;
         }).reduce(0, Integer::sum);
+        fitness = (edgeCount - crossings - (lineSwitches / Math.floor(edgeCount/4d))) / edgeCount;
     }
 
     public GridGraph<?> crossover(GridGraph<?> other) {
@@ -356,7 +357,7 @@ public class GridGraph<T> {
     /** 1 based Index **/
     private void ensureLayerHasAtLeastOneMoreThanNeeded(int layer, int row) {
         List<Vertex> rows = layers.get(layer-1) ;
-            int rowsNeeded = row+1 - rows.size();
+            int rowsNeeded = row - rows.size();
             for (int i = rowsNeeded; i > 0; i--) {
                 rows.add(null);
             }

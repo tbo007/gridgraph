@@ -33,7 +33,7 @@ class GeneticGridGraphTest extends  AbstractTest{
         Supplier<GridGraph<?>> s = () -> {
             GridGraph<String> clone = graph.clone();
             clone.mutate();
-            clone.calculateFitnessFactors();
+            clone.calculateFitness();
             return clone;
         };
 
@@ -62,6 +62,14 @@ class GeneticGridGraphTest extends  AbstractTest{
     @Test
     public void layout3(){
         GridGraph<Integer> graph = generateComplexJPL().layering().addFakeVertexes();
+        GeneticLayout gl = new GeneticLayout(graph);
+        GridGraph<?> layouted = gl.layout();
+        System.out.println(new GridPrinter(layouted).getGridAsString());
+
+    }
+    @Test
+    public void layoutKBM02(){
+        GridGraph<Integer> graph = generateJPLkbm002().layering().addFakeVertexes();
         GeneticLayout gl = new GeneticLayout(graph);
         GridGraph<?> layouted = gl.layout();
         System.out.println(new GridPrinter(layouted).getGridAsString());
