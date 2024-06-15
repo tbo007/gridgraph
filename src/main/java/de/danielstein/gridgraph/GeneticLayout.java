@@ -13,10 +13,10 @@ public class GeneticLayout {
 
     private final Comparator<GridGraph<?>> FITNESS_COMP;
 
-    public static final int GENERATION_SIZE = 2_500;
-    public static final int GENERATION_COUNT = 3_000;
+    public static final int GENERATION_SIZE = 250;
+    public static final int GENERATION_COUNT = 1000;
     public static final int ELITISM_PERCENT = 1;
-    public static final int MUTATION_PERCENT = 2;
+    public static final int MUTATION_PERCENT = 50;
     private final  GridGraph<?> startGraph;
 
     public GeneticLayout(GridGraph<?> startGraph) {
@@ -44,9 +44,9 @@ public class GeneticLayout {
 
             if(genCount % 100   == 0) {
                 System.out.println("Gen: " + (GENERATION_COUNT - genCount) + ": " + generationFitnessStat(generation));
-                if(Math.abs(generation.get(0).getFitness() - fittestOf100Gen) < 0.0001) {
+               /* if(Math.abs(generation.get(0).getFitness() - fittestOf100Gen) < 0.0001) {
                     break;
-                }
+                }*/
                     fittestOf100Gen = generation.get(0).getFitness();
             }
             genCount--;
@@ -99,7 +99,7 @@ public class GeneticLayout {
     }
 
     private List<GridGraph<?>> initGeneration () {
-        int initGenSize = startGraph.getSourceEdges().size()*100_000;
+        int initGenSize = startGraph.getSourceEdges().size()*10_000;
         List<CompletableFuture<GridGraph<?>>> asyncComp = IntStream.rangeClosed(1, initGenSize).boxed()
                 .map(i -> CompletableFuture.supplyAsync(mutate(startGraph))).collect(Collectors.toList());
         return asyncComp.stream().map(CompletableFuture::join).collect(Collectors.toList());

@@ -57,6 +57,16 @@ public class GridGraphTest extends AbstractTest {
     }
 
     @Test
+    void mergeFakeNotes() {
+        GridGraph<Integer> graph = generateJPLkbm002().layering().addFakeVertexes();
+        System.out.println(graph);
+        graph.mergeFakes2Connection();
+        System.out.println(graph);
+
+    }
+
+
+    @Test
     void addFakeNotes2() {
         GridGraph<String> graph = generateJPL();
         graph.layering().addFakeVertexes();

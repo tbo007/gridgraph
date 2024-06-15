@@ -39,8 +39,8 @@ public abstract class AbstractTest {
         Integer v5 = Integer.valueOf(5);
         return new GridGraph<Integer>().addVertex(v1).addVertex(2,1,v2).addVertex(v3).addVertex(v4)
                 .addVertex(v5)
-                .addEdge(v1, v2, 1).addEdge(v2, v3, 1).addEdge(v3, v4, 1)
-                .addEdge(v1, v5, 1).addEdge(v5, v4, 1);
+                .addEdge(v1, v2).addEdge(v2, v3).addEdge(v3, v4)
+                .addEdge(v1, v5).addEdge(v5, v4);
     }
 
     /**

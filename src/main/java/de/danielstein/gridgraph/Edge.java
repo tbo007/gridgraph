@@ -6,17 +6,14 @@ public class Edge {
 
     final Vertex target;
 
-    final int weight;
 
-
-     Edge(Vertex source, Vertex target, int weight) {
+     Edge(Vertex source, Vertex target) {
         this.source = source;
         this.target = target;
-        this.weight = weight;
     }
 
     @Override
     public String toString() {
-        return "Edge{" +"source=" + source +", target=" + target +", weight=" + weight +'}';
+        return "Edge{" +"source=" + source +", target=" + target +'}';
     }
 }

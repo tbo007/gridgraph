@@ -61,7 +61,7 @@ class GeneticGridGraphTest extends  AbstractTest{
 
     @Test
     public void layout3(){
-        GridGraph<Integer> graph = generateComplexJPL().layering().addFakeVertexes();
+        GridGraph<Integer> graph = generateComplexJPL().layering().addFakeVertexes().mergeFakes2Connection();
         GeneticLayout gl = new GeneticLayout(graph);
         GridGraph<?> layouted = gl.layout();
         System.out.println(new GridPrinter(layouted).getGridAsString());
@@ -69,7 +69,7 @@ class GeneticGridGraphTest extends  AbstractTest{
     }
     @Test
     public void layoutKBM02(){
-        GridGraph<Integer> graph = generateJPLkbm002().layering().addFakeVertexes();
+        GridGraph<Integer> graph = generateJPLkbm002().layering().addFakeVertexes().mergeFakes2Connection();
         GeneticLayout gl = new GeneticLayout(graph);
         GridGraph<?> layouted = gl.layout();
         System.out.println(new GridPrinter(layouted).getGridAsString());

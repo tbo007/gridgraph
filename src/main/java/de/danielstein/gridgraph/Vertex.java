@@ -22,11 +22,11 @@ public class Vertex {
         this.domainObj = domainObj;
     }
    
-    private Collection<Vertex> incomingFrom() {
+    public Collection<Vertex> incomingFrom() {
         return targetConnections.stream().map(e-> e.source).collect(Collectors.toSet());
     }
 
-    private Collection<Vertex> outgoingTo() {
+    public Collection<Vertex> outgoingTo() {
         return sourceConnections.stream().map(e-> e.target).collect(Collectors.toSet());
     }
 

@@ -39,17 +39,11 @@ public class GridGraph<T> {
         return this;
     }
 
-    public GridGraph<T> addEdge(T source , T target, int weight) {
+    public GridGraph<T> addEdge(T source , T target) {
         Vertex sourceVertex = domainObj2Vertex.get(source);
         Vertex targetVertex = domainObj2Vertex.get(target);
-        return  addEdge(sourceVertex,targetVertex,weight);
+        return  addEdge(sourceVertex,targetVertex);
     }
-
-    public GridGraph<T> addEdge(T source , T target) {
-        return addEdge(source,target,1);
-    }
-
-
 
     public Position getPosition(T domainObject) {
         Vertex vertex = domainObj2Vertex.get(domainObject);
@@ -94,14 +88,48 @@ public class GridGraph<T> {
                 target = newVertex(null);
                 fakeVertexes.add(target);
                 add(fi,target);
-                addEdge(source,target, currEdge.weight);
+                addEdge(source,target);
                 source = target;
             }
-            addEdge(source,currEdge.target,currEdge.weight);
+            addEdge(source,currEdge.target);
         }
         );
         return this;
     }
+
+    public GridGraph<T> mergeFakes2Connection() {
+        List<Vertex> vertexWIthFakesPointingto = getSourceEdges().stream().filter(e -> e.source.isFake() && !e.target.isFake()).map(e -> e.target).distinct().collect(Collectors.toList());
+        vertexWIthFakesPointingto.forEach(this::mergeFakes);
+        return this;
+    }
+
+    void mergeFakes(Vertex start) {
+
+        List<Vertex> incomingFakes = start.incomingFrom().stream().filter(Vertex::isFake).collect(Collectors.toList());
+        if(incomingFakes.size() <2) {
+            return;
+        }
+        ListIterator<Vertex> listIter = incomingFakes.listIterator();
+        Vertex mergeInto = listIter.next();
+        while(listIter.hasNext()) {
+            Vertex toMerge = listIter.next();
+            toMerge.outgoingTo().forEach(o2V -> {
+                removeEdge(toMerge,o2V);
+                addEdge(mergeInto,o2V);
+            });
+            toMerge.incomingFrom().forEach( iV -> {
+                removeEdge(iV,toMerge);
+                addEdge(iV,mergeInto);
+            });
+            Position position = getPosition(toMerge);
+            List<Vertex> rows = layers.get(position.layer - 1);
+            rows.set(position.row-1,null);
+            fakeVertexes.remove(toMerge);
+        }
+        mergeFakes(mergeInto);
+    }
+
+
 
 
 
@@ -248,9 +276,8 @@ public class GridGraph<T> {
     }
 
     List<Edge> getSourceEdges() {
-        List<Edge> sourceEdges = layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
+        return layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
                 .filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream()).collect(Collectors.toList());
-        return sourceEdges;
     }
 
     Position getPosition(Vertex vertex) {
@@ -264,10 +291,17 @@ public class GridGraph<T> {
         return null;
     }
 
-     GridGraph<T> addEdge(Vertex source , Vertex target, int weight) {
-        Edge edge = new Edge(source,target,weight);
+     GridGraph<T> addEdge(Vertex source , Vertex target) {
+        Edge edge = new Edge(source,target);
         source.sourceConnections.add(edge);
         target.targetConnections.add(edge);
+        return this;
+    }
+
+    GridGraph<T> removeEdge(Vertex source , Vertex target) {
+        List<Edge> edges2Remove = source.sourceConnections.stream().filter(e -> e.target.equals(target)).collect(Collectors.toList());
+        source.sourceConnections.removeAll(edges2Remove);
+        target.targetConnections.removeAll(edges2Remove);
         return this;
     }
 
