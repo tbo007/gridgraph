@@ -255,6 +255,11 @@ public class GridGraph<T> {
         fitness = (edgeCount - crossings - (lineSwitches / Math.floor(edgeCount/4d))) / edgeCount;
     }
 
+    public Integer absoluteFitness() {
+        calculateFitness();
+        return (int) (fitness * 1000d);
+    }
+
     public GridGraph<?> crossover(GridGraph<?> other) {
         GridGraph<?> clone = clone();
         GridGraph<?> otherclone = other.clone();
@@ -419,6 +424,14 @@ public class GridGraph<T> {
 
     } Vertex newVertex(T obj,int layer, int row) {
         return new PreCordinateVertex(obj,++vertexNumber,layer,row);
+    }
+
+    public List<List<Vertex>> getLayers() {
+        return  layers;
+    }
+
+    public void setLayers(List<List<Vertex>> layers) {
+        this.layers = layers;
     }
 
     @Override
