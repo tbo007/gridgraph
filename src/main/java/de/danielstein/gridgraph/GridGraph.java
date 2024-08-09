@@ -2,6 +2,7 @@ package de.danielstein.gridgraph;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Indexierung 1 bassiert...
@@ -94,6 +95,8 @@ public class GridGraph<T> {
             addEdge(source,currEdge.target);
         }
         );
+        Integer maxLayerSize = layers.stream().map(Collection::size).max(Integer::compareTo).get();
+        IntStream.rangeClosed(1,6).forEach(i -> ensureLayerHasAtLeast(i,maxLayerSize));
         return this;
     }
 
@@ -175,16 +178,41 @@ public class GridGraph<T> {
           return false;
 
       }).collect(Collectors.toSet());
-      fakeVertexes.forEach(fake -> {
-            Position fakePos = getPosition(fake);
-            Position fakeSourceConVertexPos = getPosition(fake.targetConnections.get(0).source);
-            Position fakeTargetConVertexPos = getPosition(fake.sourceConnections.get(0).target);
-            int compPos = fakePos.row-1;
-            if( compPos== fakeSourceConVertexPos.row && compPos == fakeTargetConVertexPos.row) {
-                retval.add(fake.targetConnections.get(0));
+//      fakeVertexes.forEach(fake -> {
+//            Position fakePos = getPosition(fake);
+//            Position fakeSourceConVertexPos = getPosition(fake.targetConnections.get(0).source);
+//            Position fakeTargetConVertexPos = getPosition(fake.sourceConnections.get(0).target);
+//            int compPos = fakePos.row-1;
+//            if( compPos== fakeSourceConVertexPos.row && compPos == fakeTargetConVertexPos.row) {
+//                retval.add(fake.targetConnections.get(0));
+//            }
+//        }
+//        );
+        getSourceEdges().stream().filter(e -> !e.source.isFake() &&  e.target.isFake()).forEach( e-> {
+                Vertex domainTarget = e.target;
+                while(domainTarget.isFake()) {
+                    // Fakes haben max eine ausgehende Verbindung
+                    domainTarget = domainTarget.sourceConnections.get(0).target;
+                }
+
+                // Source Layer + 1  / row von target bis target nur fake --> siehe kbm02
+                 Position domainSourcePosition= getPosition(e.source);
+                 Position domainTargetPosition = getPosition(domainTarget);
+                 if (domainTargetPosition.layer - domainSourcePosition.layer == 1) {
+                     return;
+                 }
+
+            Edge current = e;
+            while(current.target.isFake()) {
+                Position targetposition = getPosition(e.target);
+                if (targetposition.row != domainTargetPosition.row) {
+                    retval.add(current);
+                }
+                // Fakes haben max eine ausgehende Verbindung
+                current = current.target.sourceConnections.get(0);
             }
-        }
-        );
+        });
+
       return retval;
     }
 
@@ -373,7 +401,7 @@ public class GridGraph<T> {
         for (int i = layerNeeded; i > 0; i--) {
             layers.add(new ArrayList<>());
         }
-        ensureLayerHasAtLeastOneMoreThanNeeded(layer,row);
+        ensureLayerHasAtLeast(layer,row);
     }
 
     /** 1 based Index **/
@@ -389,12 +417,12 @@ public class GridGraph<T> {
             }
         }
         int nextFreeRow = rows.size()+1;
-        ensureLayerHasAtLeastOneMoreThanNeeded(layer, nextFreeRow);
+        ensureLayerHasAtLeast(layer, nextFreeRow);
         return nextFreeRow;
     }
 
     /** 1 based Index **/
-    private void ensureLayerHasAtLeastOneMoreThanNeeded(int layer, int row) {
+    private void ensureLayerHasAtLeast(int layer, int row) {
         List<Vertex> rows = layers.get(layer-1) ;
             int rowsNeeded = row - rows.size();
             for (int i = rowsNeeded; i > 0; i--) {

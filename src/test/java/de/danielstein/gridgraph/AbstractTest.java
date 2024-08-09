@@ -60,6 +60,23 @@ public abstract class AbstractTest {
 
     }
 
+    /** midsized Plan*/
+    GridGraph<Integer> generateJPLWithTwoMajorPaths() {
+
+        GridGraph<Integer> graph = new GridGraph<Integer>();
+        IntStream.rangeClosed(1, 10).boxed().forEach(graph::addVertex);
+        graph.addEdge(1,2).addEdge(2,3).addEdge(3,10)
+                .addEdge(3,4).addEdge(3,8).addEdge(4,10).addEdge(4,5).addEdge(4,8)
+                .addEdge(5,10).addEdge(5,6).addEdge(5,7)
+                .addEdge(6,10).addEdge(6,8).addEdge(6,9).addEdge(8,10)
+
+        // Without Ends to End
+        //.addEdge(7,10).addEdge(9,10)
+        ;
+                        return graph;
+    }
+
+
 
     /** Beispiel aus Obsidian Note 14b503*/
     GridGraph<Integer> generateComplexJPL() {

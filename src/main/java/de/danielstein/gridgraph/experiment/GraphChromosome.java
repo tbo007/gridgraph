@@ -45,6 +45,10 @@ public class GraphChromosome implements Chromosome<ListGene> {
         return gridGraph.absoluteFitness();
     }
 
+  public Integer countCrossings() {
+        return gridGraph.getCrossingEdges().size();
+    }
+
 
 
 

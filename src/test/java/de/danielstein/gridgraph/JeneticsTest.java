@@ -6,8 +6,11 @@ import io.jenetics.*;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
 import io.jenetics.engine.EvolutionStatistics;
+import io.jenetics.engine.Limits;
 import io.jenetics.stat.DoubleMomentStatistics;
 import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
 
 public class JeneticsTest extends AbstractTest{
 
@@ -27,6 +30,14 @@ public class JeneticsTest extends AbstractTest{
 
     }
 
+    @Test
+    void layout2PathsJpl() {
+        GridGraph<Integer> graph = generateJPLWithTwoMajorPaths().layering().addFakeVertexes().mergeFakes2Connection();
+        GridGraph<?> gridGraph = doDaMagic(graph);
+        System.out.println(gridGraph);
+
+    }
+
 
 @Test
 public void layoutStabdardJPL(){
@@ -40,6 +51,10 @@ public void layoutStabdardJPL(){
     public static Integer eval(final Genotype<ListGene> gt) {
         GraphChromosome chromosome = (GraphChromosome) gt.chromosome();
         return chromosome.calculateFitness();
+
+    } public static Integer countCrossings(final Genotype<ListGene> gt) {
+        GraphChromosome chromosome = (GraphChromosome) gt.chromosome();
+        return chromosome.countCrossings();
     }
 
     public GridGraph<?> doDaMagic(GridGraph<?> graph) {
@@ -50,21 +65,28 @@ public void layoutStabdardJPL(){
 
         Alterer<ListGene, Integer> alteres = Alterer.of(
                 new SinglePointCrossover<ListGene, Integer>(0.3),
-                new Mutator<>(0.25)
+                new Mutator<>(0.15)
         );
 
         // 3.) Create the execution environment.
-        Engine<ListGene, Integer> engine = Engine.builder(JeneticsTest::eval, genotype)
+        Engine<ListGene, Integer> engine = Engine.builder(JeneticsTest::countCrossings, genotype)
+                //.maximizing()
+                .minimizing()
                         .populationSize(100)
+
                         .alterers(alteres)
                 .build();
 
         // EvolutionStatistics sammeln
         EvolutionStatistics<Integer, DoubleMomentStatistics> statistics = EvolutionStatistics.ofNumber();
-
+        int max_gen = 120_000;
         // 4.) Start the execution (evolution) and collect the result.
         final Genotype<ListGene> result = engine.stream()
-                .limit(2000)
+                .limit(Limits.byFitnessThreshold(1))
+               // .limit( e-> e.bestFitness() != null && e.bestFitness() ==0)
+               // .limit(Limits.bySteadyFitness(max_gen/4))
+               // .limit(max_gen)
+                .limit(Limits.byExecutionTime(Duration.ofMinutes(10)))
                 .peek(statistics)
                 .collect(EvolutionResult.toBestGenotype());
 

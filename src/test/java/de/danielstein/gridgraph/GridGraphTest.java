@@ -86,6 +86,14 @@ public class GridGraphTest extends AbstractTest {
     }
 
     @Test
+    void getCrossingEdgesKBM02() {
+        GridGraph<Integer> graph = generateJPLkbm002().layering().addFakeVertexes().mergeFakes2Connection();
+        System.out.println(graph);
+        System.out.println(graph.getCrossingEdges());
+       // assertEquals(2, graph.getCrossingEdges().size());
+    }
+
+    @Test
     void allLayersEqualRowCount() {
         GridGraph<?> graph = generateComplexJPL().layering().addFakeVertexes();
         assertEquals(1L, graph.layers.stream().map(List::size).distinct().count());
