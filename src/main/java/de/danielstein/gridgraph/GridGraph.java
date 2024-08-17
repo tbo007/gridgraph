@@ -1,42 +1,49 @@
 package de.danielstein.gridgraph;
 
+import java.awt.geom.Dimension2D;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Indexierung 1 bassiert...
  * Der Knoten der nur ausgehende Verbindung hat, wird als Start Knoten gewertet.
  * Der Knoten der nur eingehende Verbindung hat, wird als End Knoten gewertet.
  *
  * Es können aber auch Knoten ohne ausgehende Verbindungen gelayoutet werden, in dem
  * eine Kante z.B. zum Ende angegeben wird...
+ * Die Indexierung ist 0 basiert.
+ *
  */
-public class GridGraph<T> {
+public class GridGraph<T>  implements  Cloneable{
 
-    int vertexNumber = 0;
-
-    double fitness = -1;
+    final AtomicInteger vertexSequence;
 
 
     // LinkedHashMap: Vertexe in der Reihenfolge des Hinzufügens verarbeiten
-    Map<T,Vertex> domainObj2Vertex = new LinkedHashMap<>();
+    private  Map<T,Vertex> domainObj2Vertex = new LinkedHashMap<>();
 
-    Collection<Vertex> fakeVertexes = new ArrayList<>();
+    List<List<Tile>> layers = new ArrayList<>();
 
-    List<List<Vertex>> layers = new ArrayList<>();
-
-
-
-    public GridGraph<T> addVertex(T obj) {
-        Vertex vertex = newVertex(obj);
-        domainObj2Vertex.putIfAbsent(obj,vertex);
-        return this;
+    public GridGraph () {
+        this(0);
     }
 
-    public GridGraph<T> addVertex(int layer, int row,T obj) {
-        Vertex vertex = newVertex(obj,layer,row);
-        domainObj2Vertex.putIfAbsent(obj,vertex);
+    protected GridGraph(int vertexSeqStart) {
+        vertexSequence = new AtomicInteger(vertexSeqStart);
+
+    }
+    
+
+//    ------ public Methods ----
+
+    public GridGraph<T> prepare() {
+        return layering().addFakeVertexes().stretchOut();
+    }
+
+    public GridGraph<T> addVertex(T domainObj) {
+        domainObj2Vertex.putIfAbsent(domainObj,newVertex(domainObj));
         return this;
     }
 
@@ -46,69 +53,296 @@ public class GridGraph<T> {
         return  addEdge(sourceVertex,targetVertex);
     }
 
-    public Position getPosition(T domainObject) {
-        Vertex vertex = domainObj2Vertex.get(domainObject);
-        return getPosition(vertex);
-    }
-
-
-
-
-    /** Ein Knoten hat entweder eine vorgegebene Position, oder kommt auf den höchsten Layer
-     * seiner Vorgänger plus 1
+    /** Ein Vertex kommt auf den höchsten Layer seiner Vorgänger plus 1
      * */
     public GridGraph<T> layering() {
         layers.clear();
         domainObj2Vertex.values().forEach(v -> {
-            if(v instanceof PreCordinateVertex) {
-                PreCordinateVertex pcV = (PreCordinateVertex) v;
-                set(pcV.layerhint,pcV.rowhint,pcV);
-            } else {
-                int layer = maxEdgeCount2Start(v)+1;
-                add(layer,v);
+            int layer = maxEdgeCount2Start(v);
+            add(layer,v);
+        });
+        return this;
+    }
+
+    /** Wenn z.B. eine Verbindung von eine, Knoten von layer 1 auf einen Knoten auf layer 4 zeigt, dann auf
+     * Layer 2,3 einen Fake anlegen und Verbindungen entsprechend umlegen
+     * @return
+     */
+    public GridGraph<T> addFakeVertexes() {
+        List<Edge> sourceEdges = getSourceEdges();
+        sourceEdges.forEach( currEdge -> {
+                    Vertex source = currEdge.source;
+                    Vertex target = currEdge.target;
+                    int sourceLayer = source.getLayer();
+                    int targetLayer = target.getLayer();
+                    if(targetLayer - sourceLayer == 1) {
+                        return; // Knoten sind schon direkte Layer Nachbarn
+                    }
+                    // Alte Verbindung entfernen und FakeKnoten einfügen
+                    currEdge.source.sourceEdges.remove(currEdge);
+                    currEdge.target.targetEdges.remove(currEdge);
+
+                    for (int fi = sourceLayer+1; fi < targetLayer ; fi++) {
+                        target = newVertex(null);
+                        add(fi,target);
+                        addEdge(source,target);
+                        source = target;
+                    }
+                    addEdge(source,currEdge.target);
+                }
+        );
+        mergeFakes2Connection();
+
+        Integer maxLayerSize = layers.stream().map(Collection::size).max(Integer::compareTo).get();
+        IntStream.range(0,layers.size()).forEach(i -> ensureLayerHasAtLeast(i,maxLayerSize));
+        return this;
+    }
+
+    /**
+     * Im prevLayer Clone in allen Tiles {@link Tile#sourceEdges} eintragen
+     * Im currentLayer Clone in allen Tiles {@link Tile#targetEdges} eintragen
+
+     * @return
+     */
+    public GridGraph<T> clone() {
+        GridGraph<T> graphClone = new GridGraph<>(vertexSequence.get());
+        for (int i = 0; i < layers.size(); i++) {
+            List<Tile> currLayer = layers.get(i);
+            List<Tile> currLayerClone = new ArrayList<>(currLayer.size());
+            for (Tile tile: currLayer) {
+                Tile tileClone = tile.clone();
+                currLayerClone.add(tileClone);
+            }
+            graphClone.layers.add(currLayerClone);
+        }
+
+        List<Edge> edges = getSourceEdges();
+        edges.addAll(getTargetEdges());
+        for (Edge edge: edges) {
+            Vertex source = edge.getSource();
+            Vertex target = edge.getTarget();
+            Vertex sourceClone = (Vertex) graphClone.layers.get(source.getLayer()).get(source.getRow());
+            Vertex targetClone = (Vertex) graphClone.layers.get(target.getLayer()).get(target.getRow());
+            graphClone.addEdge(sourceClone,targetClone);
+        }
+
+        return graphClone;
+    }
+
+    /**
+     * 1. Grid in richtiger Größe erzeugen
+     * 2. Alle Domain Objekte inklusiver eingehender Verbindung übernehmen. Und zwar so, dass die
+     * Verbindungen auf einer Zeile liegen
+     * 3. Zeilen die nur Spacer haben aus den Layern löschen.
+     * @return
+     */
+    public GridGraph<T> stretchOut() {
+        List<List<Tile>> orig = layers;
+        layers = new ArrayList<>();
+        IntStream.range(0,orig.size()).forEach(this::ensureLayerPresent);
+        int numRows = orig.get(0).size();
+        IntStream.range(0, orig.size()).forEach(i -> ensureLayerHasAtLeast(i,numRows));
+        for (Map.Entry<T, Vertex> entry: domainObj2Vertex.entrySet()) {
+            int i = 0;
+            while (!add2Row(i,entry.getValue())) {
+                i++;
+            }
+        }
+
+       int rowCount = layers.get(0).size();
+        IntStream.range(0,rowCount).filter(i -> getRow(i).stream().allMatch(Tile::isSpacer)).boxed().sorted(Comparator.reverseOrder()).forEach(i -> {
+            for ( List<Tile> layer: layers) {
+                layer.remove(i.intValue()); // Achtung remove(Object)...
             }
         });
         return this;
     }
 
-    public GridGraph<T> addFakeVertexes() {
-        List<Edge> sourceEdges = getSourceEdges();
-        sourceEdges.forEach( currEdge -> {
-            Vertex source = currEdge.source;
-            Vertex target = currEdge.target;
-            int sourceLayer = getPosition(source).layer;
-            int targetLayer = getPosition(target).layer;
-            if(targetLayer - sourceLayer == 1) {
-                return; // Knoten sind schon direkte Layer Nachbarn
-            }
-            // Alte Verbindung entfernen und FakeKnoten einfügen
-            currEdge.source.sourceConnections.remove(currEdge);
-            currEdge.target.targetConnections.remove(currEdge);
-
-            for (int fi = sourceLayer+1; fi <targetLayer ; fi++) {
-                target = newVertex(null);
-                fakeVertexes.add(target);
-                add(fi,target);
-                addEdge(source,target);
-                source = target;
-            }
-            addEdge(source,currEdge.target);
+    /**
+     * Mutieren
+     * tileSwap(layer, rowFrom, rowTo).
+     * - Möglich wenn rowto keine eingehende FakeVerbindung hat. Wenn rowFrom eingehende FakeVerbindungen hat, dann transitiver Swap probieren wie bei add2Rows
+     * - Wenn from ein Fake ist, ist kein tausch möglich.
+     * - Spacer und Vertexe ohne FakeVerbindungen können geswappt werden, wobei zwei Spacer nicht geswappt werden können, denn dies wäre eine null Operation.
+     * Wenn das nicht funktioniert dann rowSwap(rowFrom, rowTo)
+     * @param random
+     */
+    public void mutate(Random random) {
+        int ilayer = random.nextInt(layers.size());
+        List<Tile> layer = layers.get(ilayer);
+        int ifrom = random.nextInt(layer.size());
+        int ito = ifrom;
+        while (ito == ifrom) {
+            ito = random.nextInt(layer.size());
         }
-        );
-        Integer maxLayerSize = layers.stream().map(Collection::size).max(Integer::compareTo).get();
-        IntStream.rangeClosed(1,6).forEach(i -> ensureLayerHasAtLeast(i,maxLayerSize));
-        return this;
+        if(!swapTiles(ilayer,ifrom,ito)) {
+            swapRow(ifrom,ito);
+        }
     }
 
-    public GridGraph<T> mergeFakes2Connection() {
-        List<Vertex> vertexWIthFakesPointingto = getSourceEdges().stream().filter(e -> e.source.isFake() && !e.target.isFake()).map(e -> e.target).distinct().collect(Collectors.toList());
-        vertexWIthFakesPointingto.forEach(this::mergeFakes);
-        return this;
+    public void swapRows(Random random) {
+        int ilayer = random.nextInt(layers.size());
+        List<Tile> layer = layers.get(ilayer);
+        int ifrom = random.nextInt(layer.size());
+        int ito = ifrom;
+        while (ito == ifrom) {
+            ito = random.nextInt(layer.size());
+        }
+        swapRow(ifrom,ito);
+
     }
 
-    void mergeFakes(Vertex start) {
+    public boolean swapTiles(int iLayer, int iRowFrom, int iRowTo) {
+        Tile tileFrom = getTile(iLayer,iRowFrom);
+        return swapTiles(tileFrom,iRowTo,tileFrom);
+    }
 
-        List<Vertex> incomingFakes = start.incomingFrom().stream().filter(Vertex::isFake).collect(Collectors.toList());
+    public void swapRow(int iFrom, int iTo) {
+        IntStream.range(0, layers.size()).forEach(i -> swap(i, iFrom,iTo));
+    }
+
+
+
+
+    /**
+     * Multiobjective Optimization minimize Vector:
+     * [0] = anzahl Line crossings
+     * [1] = anzahl Line switch : Wenn ein Vertex mit nur einer ausgehenden nicht fake Verbindung nicht auf der selben Row liegt wie das Ziel der Verbindung.
+     * Wenn ein Vertex mit nur einer eingehenden nicht fake Verbindung nicht auf der selben Row liegt wie sein Vorgänger
+     * @return
+     */
+    public int []  fitness() {
+        return null;
+    }
+
+
+    public Set<Edge> getCrossingEdges() {
+        Set<Edge> retVal = new HashSet<>();
+        for (List<Tile> layer : layers) {
+            List<Edge> sourceEdges = layer.stream().flatMap(v -> v.sourceEdges.stream()).collect(Collectors.toList());
+            // Gehe alle distinct Kombinationen der Edges durch um intersects zu prüfen
+            // Beispiel 4 Edges Intersection Prüfung = [1,2],[1,3],[1,4],[2,3],[2,4],[3,4]
+            // Wenn es nur eine ausgehende Edge gibt, kann es kein Crossing geben
+            for (int i = 0; i < sourceEdges.size() - 1; i++) {
+                for (int j = i + 1; j < sourceEdges.size(); j++) {
+                    Edge e1 = sourceEdges.get(i);
+                    Edge e2 = sourceEdges.get(j);
+                    if (Geom.lineIntersect(
+                            e1.source.getLayer(), e1.source.getRow(), e1.target.getLayer(), e1.target.getRow(),
+                            e2.source.getLayer(), e2.source.getRow(), e2.target.getLayer(), e2.target.getRow())) {
+                        retVal.add(e1);
+                        retVal.add(e2);
+                    }
+
+                }
+            }
+        }
+        return  retVal;
+    }
+
+    public Vertex getVertex(T domainobj) {
+        if(domainObj2Vertex.isEmpty()) {
+           domainObj2Vertex = (Map<T, Vertex>) layers.stream().flatMap(List::stream).filter(Tile::isDomainObject).map(Vertex.class::cast).collect(Collectors.toMap(Vertex::getDomainObj, Function.identity()));
+        }
+        return domainObj2Vertex.get(domainobj);
+    }
+    public Vertex getVertex(int layer, int row) {
+        return (Vertex) getTile(layer,row);
+    }
+
+    public Tile getTile(int layer, int row) {
+        return layers.get(layer).get(row);
+    }
+
+
+    public List<Tile> getRow(int iRow ) {
+        List<Tile> row = new ArrayList<>(layers.size());
+        layers.forEach(l -> row.add(l.get(iRow)));
+        return row;
+    }
+
+    public boolean swapEnd2Top() {
+        getVertex(null);
+        Vertex end = domainObj2Vertex.values().stream().filter(Tile::isDomainObject).filter(t -> t.sourceEdges.isEmpty()).findFirst().get();
+        return swapTiles(end.getLayer(), end.getRow(), 0);
+    }
+
+
+    @Override
+    public String toString() {
+        return new GridPrinter(this).getGridAsString();
+    }
+
+
+
+
+    //    ------ private  Methods ----
+
+
+    /**
+     *
+     * @param tileFrom
+     * @param iRowTo
+     * @param tileSwapOrigin
+     * @return
+     */
+    private boolean swapTiles(Tile tileFrom, int iRowTo, Tile tileSwapOrigin) {
+        boolean swapOk = true;
+        Tile tileTo = getTile(tileFrom.getLayer(),iRowTo);
+        if(tileFrom.isSpacer() && tileTo.isSpacer()) {
+            return false;
+        }
+        if(tileTo.isFake()) {
+            return false;
+        }
+        if (tileTo.isDomainObject() && tileTo.targetEdges.stream().map(Edge::getSource).anyMatch(Vertex::isFake)) {
+            return false;
+        }
+        Optional<Vertex> incomingFake = tileFrom.targetEdges.stream().map(Edge::getSource).filter(Vertex::isFake).findAny();
+            if(swapOk && incomingFake.isPresent()) {
+                swapOk &= swapTiles(incomingFake.get(),iRowTo,tileSwapOrigin);
+                if(!swapOk) {
+                    return  swapOk;
+                }
+            }
+        if(swapOk) {
+            swap(tileFrom.getLayer(), tileFrom.getRow(), tileTo.getRow());
+        }
+        return  swapOk;
+    }
+
+
+    private boolean add2Row(int row, Vertex v) {
+        boolean addOk = false;
+        // 1. Check
+        Tile tile = getTile(v.getLayer(), row);
+        if (tile.isSpacer()) {
+            addOk = true;
+        }
+        // 2. Recursive, wenn !addOk abbruch
+        Optional<Vertex> incomingFake = v.targetEdges.stream().map(Edge::getSource).filter(Vertex::isFake).findAny();
+        if(addOk && incomingFake.isPresent()) {
+            addOk &= add2Row(row, incomingFake.get());
+            if (!addOk) {
+                return addOk;
+            }
+        }
+         // 3. set
+        if(addOk) {
+            set(v.getLayer(), row, v);
+        }
+        return addOk;
+    }
+
+
+    private void mergeFakes2Connection() {
+        List<Vertex> vertexWIthFakesPointingTo = getSourceEdges().stream().filter(e -> e.source.isFake() && !e.target.isFake()).map(e -> e.target).distinct().collect(Collectors.toList());
+        vertexWIthFakesPointingTo.forEach(this::mergeFakes);
+    }
+
+    private void mergeFakes(Vertex start) {
+
+        List<Vertex> incomingFakes = start.incomingEdgesFrom().stream().filter(Vertex::isFake).collect(Collectors.toList());
         if(incomingFakes.size() <2) {
             return;
         }
@@ -116,356 +350,125 @@ public class GridGraph<T> {
         Vertex mergeInto = listIter.next();
         while(listIter.hasNext()) {
             Vertex toMerge = listIter.next();
-            toMerge.outgoingTo().forEach(o2V -> {
+            toMerge.outgoingEdgesTo().forEach(o2V -> {
                 removeEdge(toMerge,o2V);
                 addEdge(mergeInto,o2V);
             });
-            toMerge.incomingFrom().forEach( iV -> {
+            toMerge.incomingEdgesFrom().forEach(iV -> {
                 removeEdge(iV,toMerge);
                 addEdge(iV,mergeInto);
             });
-            Position position = getPosition(toMerge);
-            List<Vertex> rows = layers.get(position.layer - 1);
-            rows.set(position.row-1,null);
-            fakeVertexes.remove(toMerge);
+
+            List<Tile> rows = layers.get(toMerge.getLayer());
+            set(toMerge.getLayer(), toMerge.getRow(), null);
         }
         mergeFakes(mergeInto);
     }
 
-
-
-
-
-    /** Nach Layern sortierte kreuzende Verbindungen
-     * So sollte es überkrezungsfrei sein :
-     * a1 - b1
-     * a2 - b2
-     *
-     * nicht so: a1  b2
-     *             X
-     *           a2  b1
-     * Zum detektieren: Wenn  a1 < a2, werden die Vertexe geholt, die in den Zeilen über a1 liegen unde deren Target Vertexe
-     * im nächsten Layer ermittelt. Danach werden deren Positionen ermittelt. Wenn a1 über einer dieser Positionen liegt hat
-     * man ein Kreuz
-     * Es kann atürlich auch umgedreht sein ...
-     *
-     * Ein weiterer Fall ist z.B. dieser:
-     *  a1   b1    c1
-     *     x Fake x
-     *  a1 --> Fake --> c1
-     *  a1--> b1 --> c1
-     *  Dann Läuft später im Graph die Verbindung über b1 drüber, denn fake gibt es nicht mehr.
-     *  Also wird dies als Crossing gewertet. Fakes haben immer nur eine eingehende und ausgehende Verbindung...
-     *
-     * **/
-    public Collection<Edge> getCrossingEdges() {
-        Collection<Edge> retval = getSourceEdges().stream().filter(edge -> {
-            Position pa1 = getPosition(edge.source);
-            Position pb1 = getPosition(edge.target);
-            if(pb1 == null) {
-                System.out.println("NULL");
-            }
-
-                if(pa1.isSmallerRow(pb1)) {
-               return getAboveRows(pa1.layer, pa1.row).stream().filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream())
-                        .map(e -> e.target).map(this::getPosition).
-                       anyMatch((pb1::isGreaterRow));
-            }   if(pa1.isGreaterRow(pb1)) {
-               return getBelowRows(pa1.layer, pa1.row).stream().filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream())
-                        .map(e -> e.target).map(this::getPosition).
-                       anyMatch((pb1::isSmallerRow));
-            }
-          return false;
-
-      }).collect(Collectors.toSet());
-//      fakeVertexes.forEach(fake -> {
-//            Position fakePos = getPosition(fake);
-//            Position fakeSourceConVertexPos = getPosition(fake.targetConnections.get(0).source);
-//            Position fakeTargetConVertexPos = getPosition(fake.sourceConnections.get(0).target);
-//            int compPos = fakePos.row-1;
-//            if( compPos== fakeSourceConVertexPos.row && compPos == fakeTargetConVertexPos.row) {
-//                retval.add(fake.targetConnections.get(0));
-//            }
-//        }
-//        );
-        getSourceEdges().stream().filter(e -> !e.source.isFake() &&  e.target.isFake()).forEach( e-> {
-                Vertex domainTarget = e.target;
-                while(domainTarget.isFake()) {
-                    // Fakes haben max eine ausgehende Verbindung
-                    domainTarget = domainTarget.sourceConnections.get(0).target;
-                }
-
-                // Source Layer + 1  / row von target bis target nur fake --> siehe kbm02
-                 Position domainSourcePosition= getPosition(e.source);
-                 Position domainTargetPosition = getPosition(domainTarget);
-                 if (domainTargetPosition.layer - domainSourcePosition.layer == 1) {
-                     return;
-                 }
-
-            Edge current = e;
-            while(current.target.isFake()) {
-                Position targetposition = getPosition(e.target);
-                if (targetposition.row != domainTargetPosition.row) {
-                    retval.add(current);
-                }
-                // Fakes haben max eine ausgehende Verbindung
-                current = current.target.sourceConnections.get(0);
-            }
-        });
-
-      return retval;
-    }
-
-    public GridGraph<T> layout() {
-        int crossCount = getCrossingEdges().size();
-        if(crossCount ==0) {
-            return this;
+    /*
+        z.B. ilayer = 0 und layersize = 0 --> Anlage neuer Layer
+     */
+    private void ensureLayerPresent(int iLayer) {
+        if (layers.size() <= iLayer) {
+            layers.add(new ArrayList<>());
         }
-        int maxTries = 100;
-        Random random = new Random(4711); // SEED zum nachvollziehen
-        List<List<Vertex>> bestlayersSoFar = cloneLayers();
-
-        while(maxTries > 0  && crossCount > 0) {
-            List<Integer> layerWithCrossings =  getCrossingEdges().stream().map(e -> e.target).map(this::getPosition).map(p -> p.layer)
-                    .distinct().sorted().collect(Collectors.toList());
-            for (Integer i: layerWithCrossings) {
-                Collections.shuffle(layers.get(i-1),random); // Java 0 based
-                int newCrossCount = getCrossingEdges().size();
-                if(newCrossCount == 0) {
-                    return this;
-                }
-                if (newCrossCount <= crossCount) {
-                    crossCount = newCrossCount;
-                    bestlayersSoFar = cloneLayers();
-                } else {
-                    layers = bestlayersSoFar;
-                }
-            };
-            maxTries--;
-        }
-        return this;
-    }
-
-
-    // -- Genetic -- //
-    public GridGraph<T> clone(){
-        GridGraph<T> graph = new GridGraph<>();
-        graph.vertexNumber = vertexNumber;
-        graph.fakeVertexes = fakeVertexes;
-        graph.domainObj2Vertex =  domainObj2Vertex;
-        graph.layers = cloneLayers();
-        graph.fitness = fitness;
-        return graph;
-    }
-
-    /** Sucht sich random einen Layer und shuffelt diesen */
-    public void mutate() {
-        Random random = new Random();
-        for (List<?> rows : layers) {
-            Collections.shuffle(rows,random);
-        }
-    }
-
-    public  double getFitness() {
-        return  fitness;
-    }
-
-    /** (edges - crossingedgges - (lineswitches/floor(edges/4))) / edges **/
-    public void calculateFitness(){
-        List<Edge> sourceEdges = getSourceEdges();
-        double edgeCount = sourceEdges.size();
-        double crossings = getCrossingEdges().size();
-        double lineSwitches = sourceEdges.stream().map(edge -> {
-            Position sourcePos = getPosition(edge.source);
-            Position targetPos = getPosition(edge.target);
-            return sourcePos.row != targetPos.row ? 1 : 0;
-        }).reduce(0, Integer::sum);
-        fitness = (edgeCount - crossings - (lineSwitches / Math.floor(edgeCount/4d))) / edgeCount;
-    }
-
-    public Integer absoluteFitness() {
-        calculateFitness();
-        return (int) (fitness * 1000d);
-    }
-
-    public GridGraph<?> crossover(GridGraph<?> other) {
-        GridGraph<?> clone = clone();
-        GridGraph<?> otherclone = other.clone();
-        for (int i = 0; i < clone.layers.size(); i++) {
-            if(i%2 == 0) {
-                clone.layers.set(i, otherclone.layers.get(i));
-            }
-        }
-        return clone;
-    }
-
-    //--- UtiMethods ---//
-    List<List<Vertex>> cloneLayers() {
-        List<List<Vertex>> clone = new ArrayList<>(layers.size());
-        layers.forEach(vl -> {
-            clone.add(new ArrayList<>(vl));
-        });
-        return clone;
-    }
-
-    List<Edge> getSourceEdges() {
-        return layers.stream().filter(Objects::nonNull).flatMap(Collection::stream)
-                .filter(Objects::nonNull).flatMap(v -> v.sourceConnections.stream()).collect(Collectors.toList());
-    }
-
-    Position getPosition(Vertex vertex) {
-        for (int i = 0; i < layers.size(); i++) {
-            List<Vertex> rows = layers.get(i);
-            int row = rows.indexOf(vertex);
-            if (row >= 0) {
-                return new Position(i + 1, row + 1); // Java 0 based
-            }
-        }
-        return null;
-    }
-
-     GridGraph<T> addEdge(Vertex source , Vertex target) {
-        Edge edge = new Edge(source,target);
-        source.sourceConnections.add(edge);
-        target.targetConnections.add(edge);
-        return this;
-    }
-
-    GridGraph<T> removeEdge(Vertex source , Vertex target) {
-        List<Edge> edges2Remove = source.sourceConnections.stream().filter(e -> e.target.equals(target)).collect(Collectors.toList());
-        source.sourceConnections.removeAll(edges2Remove);
-        target.targetConnections.removeAll(edges2Remove);
-        return this;
-    }
-
-    void add(int layer, Vertex v) {
-        int row = ensureNextFreeRow(layer);
-        List<Vertex> rows = layers.get(layer - 1);// java 0 based
-        rows.set(row-1, v);
     }
 
     /**
-     * Setzt den Vertx an der gegebenen Position. Wenn dort schon ein Element ist, wird dieses an die nächst freie Stelle im Layer eingefügt
-     * @param layer
+     * Setzt die übergebene Tile and die gewünschte Position im Grid und updatet
+     * die Position in der Tile.
+     * @param iLayer
      * @param row
-     * @param v
+     * @param tile Wenn null, dann wird ein Tile als Platzhalter erzeugt und gesetzt
+     * @return null, wenn vorher nichts war an der Position oder das zuvor gesetzte Tile
      */
-    void set(int layer, int row, Vertex v) {
-        ensureRowPresent(layer,row);
-        List<Vertex> rows = layers.get(layer - 1);// java 0 based
-        Vertex prev = rows.set(row -= 1, v);// java 0 based)
-        if(prev != null) {
-            add(layer,prev);
+    private Tile set(int iLayer, int row, Tile tile) {
+        List<Tile> layer = layers.get(iLayer);
+        if (tile == null) {
+            tile = new Tile();
         }
-
-
+        tile.setLayer(iLayer);
+        tile.setRow(row);
+        if (row == layer.size()) {
+            layer.add(tile);
+            return null;
+        } else {
+            return  layer.set(row,tile);
+        }
     }
 
-    Vertex get(int layer, int row) {
-        Vertex retVal = null;
-        if(layer <= layers.size()) {
-            List<Vertex> rows = layers.get(layer - 1);// java 0 based
-            if(row <= rows.size()) {
-               retVal = rows.get(row-1);
-            }
-        }
-        return retVal;
-    }
-
-    Collection<Vertex> getAboveRows(int layer, int row) {
-        Collection<Vertex> retVal = Collections.emptyList();
-        if(layer <= layers.size()) {
-            List<Vertex> rows = layers.get(layer - 1);// java 0 based
-            if(row < rows.size()) {
-                retVal = new ArrayList<>(rows.subList(row, rows.size())); // row nicht -1, denn wir wollen1 ja alles unter dieser Row...
-            }
-        }
-        return retVal;
-    }
-
-    Collection<Vertex> getBelowRows(int layer, int row) {
-        Collection<Vertex> retVal = Collections.emptyList();
-        if(layer <= layers.size()) {
-            List<Vertex> rows = layers.get(layer - 1);// java 0 based
-            if(row-1 > 0) {
-                retVal = new ArrayList<>(rows.subList(0, row)); // row nicht -1, denn wir wollen1 ja alles über dieser Row...
-            }
-        }
-        return retVal;
+    private void swap(int iLayer, int iFrom, int iTo) {
+        List<Tile> layer = layers.get(iLayer);
+        Tile tileFrom = layer.get(iFrom);
+        tileFrom.setRow(iTo);
+        Tile tileTo = layer.get(iTo);
+        tileTo.setRow(iFrom);
+        layer.set(iTo,tileFrom);
+        layer.set(iFrom,tileTo);
     }
 
 
-    /** 1 based Index **/
-    void ensureRowPresent(int layer, int row) {
-        int layerNeeded = layer - layers.size();
-        for (int i = layerNeeded; i > 0; i--) {
-            layers.add(new ArrayList<>());
-        }
-        ensureLayerHasAtLeast(layer,row);
+    private void add (int iLayer, Tile tile) {
+        ensureLayerPresent(iLayer);
+        set(iLayer,layers.get(iLayer).size(),tile);
     }
 
-    /** 1 based Index **/
-    int ensureNextFreeRow(int layer) {
-        int layerNeeded = layer - layers.size();
-        for (int i = layerNeeded; i > 0; i--) {
-            layers.add(new ArrayList<>());
-        }
-        List<Vertex> rows = layers.get(layer - 1);
-        for (int i = 0; i < rows.size(); i++) {
-            if(rows.get(i) == null) {
-                return i+1;
-            }
-        }
-        int nextFreeRow = rows.size()+1;
-        ensureLayerHasAtLeast(layer, nextFreeRow);
-        return nextFreeRow;
-    }
-
-    /** 1 based Index **/
-    private void ensureLayerHasAtLeast(int layer, int row) {
-        List<Vertex> rows = layers.get(layer-1) ;
-            int rowsNeeded = row - rows.size();
-            for (int i = rowsNeeded; i > 0; i--) {
-                rows.add(null);
-            }
-
-    }
-
-    int maxEdgeCount2Start(Vertex v) {
+    private int maxEdgeCount2Start(Vertex v) {
         return maxEdgeCount2Start(v,0);
     }
 
-    int maxEdgeCount2Start(Vertex v, int cnt) {
-        if(v.targetConnections.isEmpty()) {
+    private int maxEdgeCount2Start(Vertex v, int cnt) {
+        if(v.targetEdges.isEmpty()) {
             return cnt;
         }
         cnt++;
         int recVal = cnt;
-        for (Edge targetEdge: v.targetConnections){
+        for (Edge targetEdge: v.targetEdges){
             cnt = Math.max(cnt,maxEdgeCount2Start(targetEdge.source,recVal));
         }
         return cnt;
     }
 
-    Vertex newVertex(T obj) {
-        return new Vertex(obj,++vertexNumber);
-
-    } Vertex newVertex(T obj,int layer, int row) {
-        return new PreCordinateVertex(obj,++vertexNumber,layer,row);
+    private List<Edge> getSourceEdges() {
+        return layers.stream().flatMap(Collection::stream).flatMap (t -> t.sourceEdges.stream()).collect(Collectors.toList());
     }
 
-    public List<List<Vertex>> getLayers() {
-        return  layers;
+    private List<Edge> getTargetEdges() {
+        return layers.stream().flatMap(Collection::stream).flatMap (t -> t.targetEdges.stream()).collect(Collectors.toList());
     }
 
-    public void setLayers(List<List<Vertex>> layers) {
-        this.layers = layers;
+    //--- UtiMethods ---//
+
+    /** Fügt eine Edhe zwischen Source und Target ein, sofern sie noch nicht existiert */
+     private GridGraph<T> addEdge(Vertex source , Vertex target) {
+        Edge edge = new Edge(source,target);
+        if(!source.sourceEdges.contains(edge)) {
+            source.sourceEdges.add(edge);
+        }
+        if(!target.targetEdges.contains(edge)) {
+            target.targetEdges.add(edge);
+        }
+        return this;
     }
 
-    @Override
-    public String toString() {
-        GridPrinter gridPrinter = new GridPrinter(this);
-        return gridPrinter.getGridAsString();
+    private GridGraph<T> removeEdge(Vertex source , Vertex target) {
+        List<Edge> edges2Remove = source.sourceEdges.stream().filter(e -> e.target.equals(target)).collect(Collectors.toList());
+        source.sourceEdges.removeAll(edges2Remove);
+        target.targetEdges.removeAll(edges2Remove);
+        return this;
     }
 
+
+    private void ensureLayerHasAtLeast(int iLayer, int numRows) {
+        List<Tile> layer = layers.get(iLayer) ;
+            int rowsNeeded = numRows - layer.size();
+            for (int i = rowsNeeded; i > 0; i--) {
+                add(iLayer,null);
+            }
+
+    }
+
+    private Vertex newVertex(T obj) {
+          return new Vertex(vertexSequence.incrementAndGet(), obj);
+      }
 }

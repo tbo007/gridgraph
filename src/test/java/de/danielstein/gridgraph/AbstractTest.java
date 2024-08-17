@@ -31,17 +31,17 @@ public abstract class AbstractTest {
      * 1---2---3---4
      * |---5-------|
      */
-     GridGraph<Integer> generateSimpleGraph() {
-        Integer v1 = Integer.valueOf(1);
-        Integer v2 = Integer.valueOf(2); //PrePos
-        Integer v3 = Integer.valueOf(3);
-        Integer v4 = Integer.valueOf(4);
-        Integer v5 = Integer.valueOf(5);
-        return new GridGraph<Integer>().addVertex(v1).addVertex(2,1,v2).addVertex(v3).addVertex(v4)
-                .addVertex(v5)
-                .addEdge(v1, v2).addEdge(v2, v3).addEdge(v3, v4)
-                .addEdge(v1, v5).addEdge(v5, v4);
-    }
+//     GridGraph<Integer> generateSimpleGraph() {
+//        Integer v1 = Integer.valueOf(1);
+//        Integer v2 = Integer.valueOf(2); //PrePos
+//        Integer v3 = Integer.valueOf(3);
+//        Integer v4 = Integer.valueOf(4);
+//        Integer v5 = Integer.valueOf(5);
+//        return new GridGraph<Integer>().addVertex(v1).addVertex(2,1,v2).add(v3).add(v4)
+//                .add(v5)
+//                .addEdge(v1, v2).addEdge(v2, v3).addEdge(v3, v4)
+//                .addEdge(v1, v5).addEdge(v5, v4);
+//    }
 
     /**
      * START--FANL--SAVE--DBVA-------------ENDE

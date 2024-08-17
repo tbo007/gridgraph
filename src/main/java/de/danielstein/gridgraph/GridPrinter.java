@@ -15,9 +15,9 @@ public class GridPrinter {
     // Methode, um die maximale Länge der Elemente zu bestimmen
     private int getMaxElementLength() {
         int maxLength = 0;
-        for (List<Vertex> column : graph.layers) {
-            for (Vertex element : column) {
-                int length = vertex2Text(element).length();
+        for (List<Tile> layer : graph.layers) {
+            for (Tile tile : layer) {
+                int length = tile.toString().length();
                 if (length > maxLength) {
                     maxLength = length;
                 }
@@ -26,14 +26,10 @@ public class GridPrinter {
         return maxLength;
     }
 
-    private String vertex2Text(Vertex v) {
-        return v == null ? "  ": v.isFake() ? "  " : v.domainObj.toString();
-    }
-
     public String getGridAsString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Fitness: " +graph.getCrossingEdges().size());
+        //sb.append("Fitness: " +graph.getCrossingEdges().size());
         sb.append("\n\n");
         // Bestimme die maximale Länge der Elemente
         int maxLength = getMaxElementLength();
@@ -54,11 +50,11 @@ public class GridPrinter {
             sb.append(String.format("Z%d ", row));
 
             // Durch jede Spalte iterieren
-            for (List<Vertex> column : graph.layers) {
+            for (List<Tile> column : graph.layers) {
                 // Element der aktuellen Zeile und Spalte hinzufügen
-                Vertex vertex = column.size() > row ? column.get(row) : null;
+                Tile tile = column.size() > row ? column.get(row) : null;
 
-                sb.append(String.format("%" + maxLength + "s ", vertex2Text(vertex)));
+                sb.append(String.format("%" + maxLength + "s ", tile.toString()));
             }
             // Nach jeder Zeile einen Zeilenumbruch hinzufügen
             sb.append("\n");

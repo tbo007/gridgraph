@@ -5,46 +5,69 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Vertex {
 
-    private final int number;
+/**
+ * Ein Knoten im Grid.
+ *
+ */
+public class Vertex  extends Tile{
 
-    final  Object domainObj;
-
-
-    final List<Edge> targetConnections = new ArrayList<>();
-
-    final List<Edge> sourceConnections = new ArrayList<>();
+    public final int id;
 
 
-    public Vertex(Object domainObj ,int number) {
-        this.number = number;
+    private final  Object domainObj;
+
+
+    public Vertex(int id, Object domainObj) {
+        super(new ArrayList<>(), new ArrayList<>());
+        this.id = id;
         this.domainObj = domainObj;
     }
-   
-    public Collection<Vertex> incomingFrom() {
-        return targetConnections.stream().map(e-> e.source).collect(Collectors.toSet());
+
+    public Collection<Vertex> incomingEdgesFrom() {
+        return targetEdges.stream().map(e-> e.source).collect(Collectors.toSet());
     }
 
-    public Collection<Vertex> outgoingTo() {
-        return sourceConnections.stream().map(e-> e.target).collect(Collectors.toSet());
+    public Collection<Vertex> outgoingEdgesTo() {
+        return sourceEdges.stream().map(e-> e.target).collect(Collectors.toSet());
     }
 
     public boolean isFake() {
-        return domainObj == null;
+        return !isDomainObject();
     }
 
-    /** Wenn ein Knoten mehr als eine eingehende oder ausgehende Verbindung hat, kann er gar nicht ohne lineSwitch positioniert
-     * werden
-     */
-    public boolean isLineSwitchEssential () {
-        return sourceConnections.size() > 1 || targetConnections.size() > 1;
+    public boolean isDomainObject() {
+        return domainObj != null;
     }
 
+    public boolean isSpacer() {
+        return false;
+    }
 
+    public Object getDomainObj() {
+        return domainObj;
+    }
 
     @Override
     public String toString() {
-        return  "Vertex: " + number + " / " +   (isFake() ? "FakeVertex" :  "DomainObj: " + domainObj.toString());
+        if(isFake()) {
+            return "F" + id;
+        }
+        if(isDomainObject()) {
+            return "D" + id + "(" + domainObj + ")";
+        }
+        return "Error";
+    }
+
+    /**
+     * shallowCopy ohne die Edges. Der Aufrufer muss sich um das clonen dieser kümmern.
+     * @return
+     */
+    @Override
+    public Vertex clone() {
+        Vertex clone  = new Vertex(id,domainObj);
+        clone.setLayer(getLayer());
+        clone.setRow(getRow());
+        return clone;
     }
 }
