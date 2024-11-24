@@ -1,6 +1,5 @@
 package de.danielstein.gridgraph;
 
-import java.awt.geom.Dimension2D;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -8,20 +7,39 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Der Knoten der nur ausgehende Verbindung hat, wird als Start Knoten gewertet.
- * Der Knoten der nur eingehende Verbindung hat, wird als End Knoten gewertet.
+ * Layering Grid Graph Implementation
+ * The Grid is determined by the Edges in the graph.
+ * columns:the vertex witch is the furthest away (measured by its incoming edges) from
+ * any vertex with no incoming edges determines the column count
+ * rows: The column with the most vertices determines the rowsize for the entire grid
  *
- * Es können aber auch Knoten ohne ausgehende Verbindungen gelayoutet werden, in dem
- * eine Kante z.B. zum Ende angegeben wird...
- * Die Indexierung ist 0 basiert.
+ *
+ *
+ * Ussage (supossing JOBS is tge Domain Class):
+ * 1. prepare
+ * GridGraph<JOBS> graph = new GridGraph<>()
+ * For every Vertex: @see {@link #addVertex(T domainObj)}
+ * For every Edge: @see {@link #addEdge(T source , T target)}
+ * graph = @see {@link #prepare()}
+ *
+ * 2. layouting (e.g. using Jenetics)
+ * - using {@link #swapRows(Random)} / {@link #mutate(Random)}
+ *
+ *
+ * 3. query Domainobj positions (Indexing is 0 based)
+ * @see #getVertex(T domainObj)
+ *
+ *
+ * @param <T> Type of the domainObjects represented in this Graph
+ * @author Daniel Stein
+ *
  *
  */
 public class GridGraph<T>  implements  Cloneable{
 
     final AtomicInteger vertexSequence;
 
-
-    // LinkedHashMap: Vertexe in der Reihenfolge des Hinzufügens verarbeiten
+    // LinkedHashMap: Using Vertices in adding order
     private  Map<T,Vertex> domainObj2Vertex = new LinkedHashMap<>();
 
     List<List<Tile>> layers = new ArrayList<>();
@@ -32,12 +50,18 @@ public class GridGraph<T>  implements  Cloneable{
 
     protected GridGraph(int vertexSeqStart) {
         vertexSequence = new AtomicInteger(vertexSeqStart);
-
     }
     
 
 //    ------ public Methods ----
 
+    /**
+     * Turns this into a usable GridGraph, by doing the following steps
+     * 1. @see {@link #layering()}
+     * 2. @see {@link #addFakeVertexes()}
+     * 3. @see {@link #stretchOut()}
+     * @return this
+     */
     public GridGraph<T> prepare() {
         return layering().addFakeVertexes().stretchOut();
     }
@@ -53,12 +77,21 @@ public class GridGraph<T>  implements  Cloneable{
         return  addEdge(sourceVertex,targetVertex);
     }
 
-    /** Ein Vertex kommt auf den höchsten Layer seiner Vorgänger plus 1
-     * */
+    /**
+     * Distributes all Vertices to their target layer.
+     * the layer is determined by the max layer of its incoming vertexes plus one
+     * E.g.
+     * START--FANL--SAVE--DBVA-------------ENDE
+     *           +           +--RESTORE----+
+     *           +-----------+--FREL-------+
+     * This graph has six layers 0-5.
+     * The vertex FREL has incoming Connections from layer 1 (START) and layer 3 (DBVA)
+     * So its layer is 4.
+     */
     public GridGraph<T> layering() {
         layers.clear();
         domainObj2Vertex.values().forEach(v -> {
-            int layer = maxEdgeCount2Start(v);
+            int layer = determineLayer(v);
             add(layer,v);
         });
         return this;
@@ -76,7 +109,7 @@ public class GridGraph<T>  implements  Cloneable{
                     int sourceLayer = source.getLayer();
                     int targetLayer = target.getLayer();
                     if(targetLayer - sourceLayer == 1) {
-                        return; // Knoten sind schon direkte Layer Nachbarn
+                        return; // Vertexes are layer neighbours.
                     }
                     // Alte Verbindung entfernen und FakeKnoten einfügen
                     currEdge.source.sourceEdges.remove(currEdge);
@@ -88,6 +121,9 @@ public class GridGraph<T>  implements  Cloneable{
                         addEdge(source,target);
                         source = target;
                     }
+                    // Make Connection from the last fakevertex to the domain Vertex of the
+                    // replaced connection
+
                     addEdge(source,currEdge.target);
                 }
         );
@@ -413,18 +449,25 @@ public class GridGraph<T>  implements  Cloneable{
         set(iLayer,layers.get(iLayer).size(),tile);
     }
 
-    private int maxEdgeCount2Start(Vertex v) {
-        return maxEdgeCount2Start(v,0);
+    private int determineLayer(Vertex v) {
+        return determineLayer(v,0);
     }
 
-    private int maxEdgeCount2Start(Vertex v, int cnt) {
+    /**
+     * Determines
+     * @param v
+     * @param cnt
+     * @return
+     * todo: method name 
+     */
+    private int determineLayer(Vertex v, int cnt) {
         if(v.targetEdges.isEmpty()) {
             return cnt;
         }
         cnt++;
         int recVal = cnt;
         for (Edge targetEdge: v.targetEdges){
-            cnt = Math.max(cnt,maxEdgeCount2Start(targetEdge.source,recVal));
+            cnt = Math.max(cnt, determineLayer(targetEdge.source,recVal));
         }
         return cnt;
     }
