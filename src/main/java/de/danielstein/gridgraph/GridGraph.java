@@ -59,11 +59,15 @@ public class GridGraph<T>  implements  Cloneable{
      * Turns this into a usable GridGraph, by doing the following steps
      * 1. @see {@link #layering()}
      * 2. @see {@link #addFakeVertexes()}
-     * 3. @see {@link #stretchOut()}
+     * 2.1. @see {@link #mergeFakeVertices()}
+     * 2.2.
+     * 4. @see {@link #arrangeGridAndAlignFakesInRows()}
+     *
+     * 3. @see {@link #arrangeGridAndAlignFakesInRows()}
      * @return this
      */
     public GridGraph<T> prepare() {
-        return layering().addFakeVertexes().stretchOut();
+        return layering().addFakeVertexes().arrangeGridAndAlignFakesInRows();
     }
 
     public GridGraph<T> addVertex(T domainObj) {
@@ -97,8 +101,10 @@ public class GridGraph<T>  implements  Cloneable{
         return this;
     }
 
-    /** Wenn z.B. eine Verbindung von eine, Knoten von layer 1 auf einen Knoten auf layer 4 zeigt, dann auf
-     * Layer 2,3 einen Fake anlegen und Verbindungen entsprechend umlegen
+    /** For simplifiying crossing detection: If a vertex at layer one is connected to a vertex on layer four:
+     * Replace this connection with multiple connections, of which each only span one layer. To do so insert
+     * fake vertexes on layer two and three and connect domain vertex on layer one with fake on layer two. fake
+     * on layer two with fake on layer three and this fake with the original domain vertex on layer four.
      * @return
      */
     public GridGraph<T> addFakeVertexes() {
@@ -111,7 +117,7 @@ public class GridGraph<T>  implements  Cloneable{
                     if(targetLayer - sourceLayer == 1) {
                         return; // Vertexes are layer neighbours.
                     }
-                    // Alte Verbindung entfernen und FakeKnoten einfügen
+                    // remove multilayer connection for replacement
                     currEdge.source.sourceEdges.remove(currEdge);
                     currEdge.target.targetEdges.remove(currEdge);
 
@@ -123,11 +129,10 @@ public class GridGraph<T>  implements  Cloneable{
                     }
                     // Make Connection from the last fakevertex to the domain Vertex of the
                     // replaced connection
-
                     addEdge(source,currEdge.target);
                 }
         );
-        mergeFakes2Connection();
+        mergeFakeVertices();
 
         Integer maxLayerSize = layers.stream().map(Collection::size).max(Integer::compareTo).get();
         IntStream.range(0,layers.size()).forEach(i -> ensureLayerHasAtLeast(i,maxLayerSize));
@@ -166,33 +171,50 @@ public class GridGraph<T>  implements  Cloneable{
     }
 
     /**
-     * 1. Grid in richtiger Größe erzeugen
-     * 2. Alle Domain Objekte inklusiver eingehender Verbindung übernehmen. Und zwar so, dass die
-     * Verbindungen auf einer Zeile liegen
-     * 3. Zeilen die nur Spacer haben aus den Layern löschen.
-     * @return
+     * Arranges the grid to fit all domain objects and their connections, ensuring that all recursively incoming
+     * fake vertices are placed in the same row. This method performs the following steps:
+     * 1. Creates a grid with the correct size.
+     * 2. Transfers all domain objects and their incoming connections, ensuring connections are on the same row.
+     * 3. Deletes rows from layers that contain only spacers.
+     *
+     * @return A GridGraph with domain objects distributed and fake vertices aligned in rows.
      */
-    public GridGraph<T> stretchOut() {
-        List<List<Tile>> orig = layers;
+    public GridGraph<T> arrangeGridAndAlignFakesInRows() {
+        // Original layers are saved in 'originalLayers' and 'layers' is re-initialized.
+        List<List<Tile>> originalLayers = layers;
         layers = new ArrayList<>();
-        IntStream.range(0,orig.size()).forEach(this::ensureLayerPresent);
-        int numRows = orig.get(0).size();
-        IntStream.range(0, orig.size()).forEach(i -> ensureLayerHasAtLeast(i,numRows));
-        for (Map.Entry<T, Vertex> entry: domainObj2Vertex.entrySet()) {
-            int i = 0;
-            while (!add2Row(i,entry.getValue())) {
-                i++;
+
+        // Ensure each layer from the original has a corresponding layer in the new grid.
+        IntStream.range(0, originalLayers.size()).forEach(this::ensureLayerPresent);
+
+        // Get the number of rows from the first layer.
+        int numberOfRows = originalLayers.get(0).size();
+
+        // Ensure that each layer has at least 'numberOfRows' rows.
+        IntStream.range(0, originalLayers.size()).forEach(i -> ensureLayerHasAtLeast(i, numberOfRows));
+
+        // Add each domain object to a row, incrementing row index until successful.
+        for (Map.Entry<T, Vertex> entry : domainObj2Vertex.entrySet()) {
+            int rowIndex = 0;
+            while (!placeAndAlignFakes(rowIndex, entry.getValue())) {
+                rowIndex++;
             }
         }
 
-       int rowCount = layers.get(0).size();
-        IntStream.range(0,rowCount).filter(i -> getRow(i).stream().allMatch(Tile::isSpacer)).boxed().sorted(Comparator.reverseOrder()).forEach(i -> {
-            for ( List<Tile> layer: layers) {
-                layer.remove(i.intValue()); // Achtung remove(Object)...
-            }
-        });
+        // Remove rows that consist solely of spacer tiles.
+        int rowCount = layers.get(0).size();
+        IntStream.range(0, rowCount)
+                .filter(rowIndex -> getRow(rowIndex).stream().allMatch(Tile::isSpacer))
+                .boxed()
+                .sorted(Comparator.reverseOrder())
+                .forEach(rowIndex -> {
+                    layers.forEach(layer -> layer.remove(rowIndex.intValue()));
+                });
+
         return this;
     }
+
+
 
     /**
      * Mutieren
@@ -348,58 +370,109 @@ public class GridGraph<T>  implements  Cloneable{
     }
 
 
-    private boolean add2Row(int row, Vertex v) {
-        boolean addOk = false;
-        // 1. Check
-        Tile tile = getTile(v.getLayer(), row);
+    /**
+     * Attempts to place the given vertex and all its recursively incoming fake vertices in the specified row.
+     * If the tile at the specified layer and row is a spacer, the vertex can be placed.
+     * If the vertex has incoming fake edges, the method recursively attempts to place these vertices first.
+     * If the vertex and its dependencies are successfully placed, the method sets the vertex in the grid.
+     *
+     * @param row The row index where the vertex and its fake vertices should be placed.
+     * @param vertex The vertex to be placed.
+     * @return true if the vertex and all its recursively incoming fakes were successfully placed, false otherwise.
+     */
+    private boolean placeAndAlignFakes(int row, Vertex vertex) {
+        boolean canPlace = false;
+
+        // Check if the tile at the specified layer and row is a spacer.
+        Tile tile = getTile(vertex.getLayer(), row);
         if (tile.isSpacer()) {
-            addOk = true;
+            canPlace = true;
         }
-        // 2. Recursive, wenn !addOk abbruch
-        Optional<Vertex> incomingFake = v.targetEdges.stream().map(Edge::getSource).filter(Vertex::isFake).findAny();
-        if(addOk && incomingFake.isPresent()) {
-            addOk &= add2Row(row, incomingFake.get());
-            if (!addOk) {
-                return addOk;
+
+        // If canPlace is true, check for incoming fake vertices and place them recursively.
+        Optional<Vertex> incomingFake = vertex.targetEdges.stream()
+                .map(Edge::getSource)
+                .filter(Vertex::isFake)
+                .findAny();
+        if (canPlace && incomingFake.isPresent()) {
+            canPlace &= placeAndAlignFakes(row, incomingFake.get());
+            if (!canPlace) {
+                return canPlace;
             }
         }
-         // 3. set
-        if(addOk) {
-            set(v.getLayer(), row, v);
+
+        // If canPlace is still true, set the vertex in the grid.
+        if (canPlace) {
+            set(vertex.getLayer(), row, vertex);
         }
-        return addOk;
+
+        return canPlace;
     }
 
 
-    private void mergeFakes2Connection() {
-        List<Vertex> vertexWIthFakesPointingTo = getSourceEdges().stream().filter(e -> e.source.isFake() && !e.target.isFake()).map(e -> e.target).distinct().collect(Collectors.toList());
-        vertexWIthFakesPointingTo.forEach(this::mergeFakes);
+
+
+    private void mergeFakeVertices() {
+        List<Vertex> vertexWithFakesPointingTo =
+                getSourceEdges().stream().filter(e -> e.source.isFake() && !e.target.isFake())
+                        .map(e -> e.target).distinct().collect(Collectors.toList());
+        vertexWithFakesPointingTo.forEach(this::mergeFakeVertices);
     }
 
-    private void mergeFakes(Vertex start) {
+    /**
+     * Merges all fake vertices connected to the given start vertex into one.
+     * This method performs the following steps:
+     * 1. Collects all incoming fake vertices connected to the start vertex.
+     * 2. If there are less than two fake vertices, the method returns.
+     * 3. Otherwise, iterates over the list of incoming fake vertices.
+     * 4. For each vertex to be merged:
+     *    a. Transfers all outgoing edges from the vertex to be merged to the primary fake vertex.
+     *    b. Transfers all incoming edges to the vertex to be merged to the primary fake vertex.
+     *    c. Removes the vertex to be merged from its layer in the grid.
+     * 5. Recursively calls itself with the merged vertex to ensure all fake vertices are merged.
+     *
+     * @param startVertex The vertex from which to start merging fake vertices.
+     */
+    private void mergeFakeVertices(Vertex startVertex) {
 
-        List<Vertex> incomingFakes = start.incomingEdgesFrom().stream().filter(Vertex::isFake).collect(Collectors.toList());
-        if(incomingFakes.size() <2) {
+        // Collect all incoming fake vertices connected to the start vertex.
+        List<Vertex> incomingFakeVertices = startVertex.incomingEdgesFrom().stream()
+                .filter(Vertex::isFake)
+                .collect(Collectors.toList());
+
+        // If there are less than two fake vertices, exit the method.
+        if (incomingFakeVertices.size() < 2) {
             return;
         }
-        ListIterator<Vertex> listIter = incomingFakes.listIterator();
-        Vertex mergeInto = listIter.next();
-        while(listIter.hasNext()) {
-            Vertex toMerge = listIter.next();
-            toMerge.outgoingEdgesTo().forEach(o2V -> {
-                removeEdge(toMerge,o2V);
-                addEdge(mergeInto,o2V);
-            });
-            toMerge.incomingEdgesFrom().forEach(iV -> {
-                removeEdge(iV,toMerge);
-                addEdge(iV,mergeInto);
+
+        // Create an iterator over the list of incoming fake vertices.
+        ListIterator<Vertex> fakeVertexIterator = incomingFakeVertices.listIterator();
+        Vertex primaryFakeVertex = fakeVertexIterator.next();
+
+        while (fakeVertexIterator.hasNext()) {
+            Vertex vertexToMerge = fakeVertexIterator.next();
+
+            // Transfer all outgoing edges from the vertex to be merged to the primary fake vertex.
+            vertexToMerge.outgoingEdgesTo().forEach(outgoingVertex -> {
+                removeEdge(vertexToMerge, outgoingVertex);
+                addEdge(primaryFakeVertex, outgoingVertex);
             });
 
-            List<Tile> rows = layers.get(toMerge.getLayer());
-            set(toMerge.getLayer(), toMerge.getRow(), null);
+            // Transfer all incoming edges to the vertex to be merged to the primary fake vertex.
+            vertexToMerge.incomingEdgesFrom().forEach(incomingVertex -> {
+                removeEdge(incomingVertex, vertexToMerge);
+                addEdge(incomingVertex, primaryFakeVertex);
+            });
+
+            // Remove the vertex to be merged from its layer in the grid.
+            List<Tile> rowTiles = layers.get(vertexToMerge.getLayer());
+            set(vertexToMerge.getLayer(), vertexToMerge.getRow(), null);
         }
-        mergeFakes(mergeInto);
+
+        // Recursively call the method with the merged vertex.
+        mergeFakeVertices(primaryFakeVertex);
     }
+
 
     /*
         z.B. ilayer = 0 und layersize = 0 --> Anlage neuer Layer

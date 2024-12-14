@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment=" Grid Graph Documentation">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/experiment/GraphChromosome.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +37,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitRewordedCommitMessages">
+    <option name="commitMessagesMapping">
+      <RewordedCommitMessageMapping>
+        <option name="originalMessage" value="Entwicklung&#10;&#10;Non Null Check" />
+        <option name="rewordedMessage" value="Entwicklung" />
+      </RewordedCommitMessageMapping>
+    </option>
+    <option name="currentCommit" value="1" />
+    <option name="onto" value="c679de375ce920d6c8f2cc65acb41dc7f6996133" />
+  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -53,23 +61,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.GridGraphTest.executor": "Run",
-    "JUnit.GridGraphTest.getCrossingEdgesJpl1.executor": "Run",
-    "JUnit.GridGraphTest.layering.executor": "Run",
-    "JUnit.JeneticsTest.layoutComplexJPL.executor": "Run",
-    "JavaClassFindUsagesOptions.isImplementingClasses": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.GridGraphTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GridGraphTest.getCrossingEdgesJpl1.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GridGraphTest.layering.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.JeneticsTest.layoutComplexJPL.executor&quot;: &quot;Run&quot;,
+    &quot;JavaClassFindUsagesOptions.isImplementingClasses&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -492,7 +500,6 @@
     <MESSAGE value="neue fitness function" />
     <MESSAGE value="Jenetics" />
     <MESSAGE value="Non Null Check" />
-    <MESSAGE value="Entwicklung" />
     <MESSAGE value="Clone ..." />
     <MESSAGE value="Entw." />
     <MESSAGE value="StretchOut." />
@@ -500,7 +507,8 @@
     <MESSAGE value="getCrossingEdges final Impl" />
     <MESSAGE value="Jenetics Impl Grid Graph" />
     <MESSAGE value=" Grid Graph Documentation" />
-    <option name="LAST_COMMIT_MESSAGE" value=" Grid Graph Documentation" />
+    <MESSAGE value="Entwicklung" />
+    <option name="LAST_COMMIT_MESSAGE" value="Entwicklung" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

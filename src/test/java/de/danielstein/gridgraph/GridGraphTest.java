@@ -83,9 +83,9 @@ public class GridGraphTest extends AbstractTest {
     }
 
     @Test
-    void testStretchOut() {
+    void testarrangeGridAndAlignFakesInRows() {
         Stream.of(generateComplexJPL(),generateJPLWithTwoMajorPaths(),generateJPLkbm002())
-                .map(g -> g.layering().addFakeVertexes().stretchOut()).forEach(GridGraphTest::assertFakesAlleOnOneRow);
+                .map(g -> g.layering().addFakeVertexes().arrangeGridAndAlignFakesInRows()).forEach(GridGraphTest::assertFakesAlleOnOneRow);
     }
 
     /**
