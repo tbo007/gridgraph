@@ -19,7 +19,6 @@ public abstract class AbstractTest {
         //                                0        1       2       3      4       5
         List<String> v = Arrays.asList("start", "save", "info", "dbva", "frel", "ende");
         GridGraph<String>  graph = new GridGraph<>();
-        v.forEach(graph::addVertex);
         graph.addEdge(v.get(0),v.get(1)).addEdge(v.get(0),v.get(3)).addEdge(v.get(1),v.get(4)).addEdge(v.get(3),v.get(2))
                 .addEdge(v.get(2),v.get(5)).addEdge(v.get(4),v.get(5));
 
@@ -47,11 +46,11 @@ public abstract class AbstractTest {
      * START--FANL--SAVE--DBVA-------------ENDE
      *           +           +--RESTORE----+
      *           +-----------+--FREL-------+
+     * To verify that layer creation can occur in any order "ende" ist added before restore and frel.
      */
      GridGraph<String> generateJPL() {
         List<String> v = Arrays.asList("start", "fanl", "save", "dbva", "restore", "frel", "ende");
         GridGraph<String>  graph = new GridGraph<String>();
-        v.forEach(graph::addVertex);
         graph.addEdge(v.get(0),v.get(1)).addEdge(v.get(1),v.get(2)).addEdge(v.get(2),v.get(3)).addEdge(v.get(3),v.get(6))
                 .addEdge(v.get(3),v.get(4)).addEdge(v.get(3),v.get(5))
                 .addEdge(v.get(4),v.get(6)).addEdge(v.get(5), v.get(6))
@@ -64,7 +63,6 @@ public abstract class AbstractTest {
     GridGraph<Integer> generateJPLWithTwoMajorPaths() {
 
         GridGraph<Integer> graph = new GridGraph<Integer>();
-        IntStream.rangeClosed(1, 10).boxed().forEach(graph::addVertex);
         graph.addEdge(1,2).addEdge(2,3).addEdge(3,10)
                 .addEdge(3,4).addEdge(3,8).addEdge(4,10).addEdge(4,5).addEdge(4,8)
                 .addEdge(5,10).addEdge(5,6).addEdge(5,7)
@@ -82,7 +80,6 @@ public abstract class AbstractTest {
     GridGraph<Integer> generateComplexJPL() {
 
         GridGraph<Integer>  graph = new GridGraph<Integer>();
-        IntStream.rangeClosed(1,16).boxed().forEach(graph::addVertex);
         graph.addEdge(1,2).addEdge(2,3).addEdge(3,4).addEdge(3,15)
                 .addEdge(4,5).addEdge(4,14).addEdge(5,6).addEdge(6,7)
                 .addEdge(6,9).addEdge(7,8).addEdge(7,9).addEdge(8,10)
@@ -97,7 +94,6 @@ public abstract class AbstractTest {
     GridGraph<Integer> generateJPLkbm002() {
 
         GridGraph<Integer>  graph = new GridGraph<Integer>();
-        IntStream.rangeClosed(1,11).boxed().forEach(graph::addVertex);
         graph.addEdge(1,2).addEdge(2,3).addEdge(3,4).addEdge(3,10)
                 .addEdge(4,5).addEdge(4,10).addEdge(5,6).addEdge(6,7)
                 .addEdge(6,8).addEdge(6,9).addEdge(6,10).addEdge(6,11)

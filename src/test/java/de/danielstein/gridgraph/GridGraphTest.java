@@ -27,7 +27,7 @@ public class GridGraphTest extends AbstractTest {
         List<String> v = Arrays.asList("start", "fanl", "save", "dbva", "frel", "ende");
         for (int i = 0; i < v.size(); i++) {
             Vertex vertex = graph.getVertex(v.get(i));
-            assertEquals(i, vertex.getLayer());
+            assertEquals(i, vertex.getLayer(), vertex +" not on expected layer");
         }
     }
 
@@ -90,27 +90,30 @@ public class GridGraphTest extends AbstractTest {
 
     /**
      *         S0      S1      S2      S3      S4      S5      S6      S7
-     * Z0   D1(1)   D2(2)   D3(3)   D4(4)   D5(5)   D6(6)   D7(7)       S
-     * Z1       S       S       S       S       S       S   D8(8)       S
-     * Z2       S       S       S       S       S       S   D9(9)       S
-     * Z3       S       S       S     F12     F15     F16 D10(10)       S
-     * Z4       S       S       S       S       S       S     F17 D11(11)
+     * Z0   D1(1)   D2(2)   D3(3)   D4(4)   D6(5)   D7(6)   D8(7)
+     * Z1                             F12     F15     F14  D5(10)
+     * Z2                                                   D9(8)
+     * Z3                                                  D10(9)
+     * Z4                                                     F17 D11(11)
      */
     @Test
     void  testSwapTile() {
         GridGraph<Integer> graph = generateJPLkbm002().prepare();
         System.out.println(graph);
-        Vertex d11 = graph.getVertex(11);
-        // geht nicht weil F17 auf D10 nicht erlaubt
-        assertFalse(graph.swapTiles(d11.getLayer(), d11.getRow(), d11.getRow()-1));
-        System.out.println(graph);
+        Vertex d8 = graph.getVertex(8);
+        Vertex d9 = graph.getVertex(9);
         Vertex d10 = graph.getVertex(10);
+        Vertex d11 = graph.getVertex(11);
+        // geht nicht weil F17 auf D(10) nicht erlaubt
+
+
+        assertFalse(graph.swapTiles(d11.getLayer(), d11.getRow(), d10.getRow()));
+        System.out.println(graph);
         // geht weil D10 auf D9 geht und die Fakes von D10 auf Spacer ist auch erlaubt
-        assertTrue(graph.swapTiles(d10.getLayer(), d10.getRow(), d10.getRow()-1));
+        assertTrue(graph.swapTiles(d10.getLayer(), d10.getRow(), d9.getRow()));
          System.out.println(graph);
         assertFakesAlleOnOneRow(graph);
-        // D11 kann nun verschoben werden, weil in der Aktion vorher D10 und D9 den Platz getauscht haben
-        assertTrue(graph.swapTiles(d11.getLayer(), d11.getRow(), d11.getRow()-1));
+        assertTrue(graph.swapTiles(d11.getLayer(), d11.getRow(), d8.getRow()));
          System.out.println(graph);
         assertFakesAlleOnOneRow(graph);
         assertTrue(graph.swapTiles(d10.getLayer(),d10.getRow(),0));
@@ -154,19 +157,14 @@ Z2           S           S          F8          F9    D6(frel)           S
 0
      */
     @Test
-    void getCrossingEdgesJpl1() {
-        GridGraph<String> graph = generateJPL().layering().prepare();
-        assertEquals(2, graph.getCrossingEdges().size());
-
-        Vertex endPoint = graph.getVertex("ende");
-        graph.swapTiles(5,endPoint.getRow(),0);
-        graph.swapTiles(4,1,2);
-        Collection<Edge> crossingEdges = graph.getCrossingEdges();
-
+    void getCrossingEdges() {
+        GridGraph<Integer> graph = new GridGraph<>();
+        graph.addEdge(1,2);
+        graph.addEdge(3,4);
+        graph = graph.prepare();
         assertEquals(0, graph.getCrossingEdges().size());
-
-       // System.out.println(graph);
-       //graph.getCrossingEdges().stream().forEach(System.out::println);
+        assertTrue(graph.swapTiles(1,0,1));
+        assertEquals(2, graph.getCrossingEdges().size());
 
     }
 

@@ -13,12 +13,9 @@ import java.util.stream.IntStream;
  * any vertex with no incoming edges determines the column count
  * rows: The column with the most vertices determines the rowsize for the entire grid
  *
- *
- *
  * Ussage (supossing JOBS is tge Domain Class):
  * 1. prepare
  * GridGraph<JOBS> graph = new GridGraph<>()
- * For every Vertex: @see {@link #addVertex(T domainObj)}
  * For every Edge: @see {@link #addEdge(T source , T target)}
  * graph = @see {@link #prepare()}
  *
@@ -70,14 +67,18 @@ public class GridGraph<T>  implements  Cloneable{
         return layering().addFakeVertexes().arrangeGridAndAlignFakesInRows();
     }
 
-    public GridGraph<T> addVertex(T domainObj) {
-        domainObj2Vertex.putIfAbsent(domainObj,newVertex(domainObj));
-        return this;
-    }
-
     public GridGraph<T> addEdge(T source , T target) {
-        Vertex sourceVertex = domainObj2Vertex.get(source);
-        Vertex targetVertex = domainObj2Vertex.get(target);
+
+        Vertex sourceVertex =  domainObj2Vertex.get(source);
+        if (sourceVertex == null) {
+            sourceVertex = newVertex(source);
+            domainObj2Vertex.put(source, sourceVertex);
+        }
+        Vertex targetVertex =  domainObj2Vertex.get(target);
+        if (targetVertex == null) {
+            targetVertex = newVertex(target);
+            domainObj2Vertex.put(target,targetVertex);
+        }
         return  addEdge(sourceVertex,targetVertex);
     }
 
@@ -252,34 +253,19 @@ public class GridGraph<T>  implements  Cloneable{
 
     public boolean swapTiles(int iLayer, int iRowFrom, int iRowTo) {
         Tile tileFrom = getTile(iLayer,iRowFrom);
-        return swapTiles(tileFrom,iRowTo,tileFrom);
+        return swapTiles(tileFrom,iRowTo);
     }
 
     public void swapRow(int iFrom, int iTo) {
         IntStream.range(0, layers.size()).forEach(i -> swap(i, iFrom,iTo));
     }
 
-
-
-
-    /**
-     * Multiobjective Optimization minimize Vector:
-     * [0] = anzahl Line crossings
-     * [1] = anzahl Line switch : Wenn ein Vertex mit nur einer ausgehenden nicht fake Verbindung nicht auf der selben Row liegt wie das Ziel der Verbindung.
-     * Wenn ein Vertex mit nur einer eingehenden nicht fake Verbindung nicht auf der selben Row liegt wie sein Vorgänger
-     * @return
-     */
-    public int []  fitness() {
-        return null;
-    }
-
-
     public Set<Edge> getCrossingEdges() {
         Set<Edge> retVal = new HashSet<>();
         for (List<Tile> layer : layers) {
             List<Edge> sourceEdges = layer.stream().flatMap(v -> v.sourceEdges.stream()).collect(Collectors.toList());
-            // Gehe alle distinct Kombinationen der Edges durch um intersects zu prüfen
-            // Beispiel 4 Edges Intersection Prüfung = [1,2],[1,3],[1,4],[2,3],[2,4],[3,4]
+            // Check all distinct edge Combination for intersection
+            // for example:  4 Edges Intersection check = [1,2],[1,3],[1,4],[2,3],[2,4],[3,4]
             // Wenn es nur eine ausgehende Edge gibt, kann es kein Crossing geben
             for (int i = 0; i < sourceEdges.size() - 1; i++) {
                 for (int j = i + 1; j < sourceEdges.size(); j++) {
@@ -300,7 +286,9 @@ public class GridGraph<T>  implements  Cloneable{
 
     public Vertex getVertex(T domainobj) {
         if(domainObj2Vertex.isEmpty()) {
-           domainObj2Vertex = (Map<T, Vertex>) layers.stream().flatMap(List::stream).filter(Tile::isDomainObject).map(Vertex.class::cast).collect(Collectors.toMap(Vertex::getDomainObj, Function.identity()));
+           domainObj2Vertex = (Map<T, Vertex>) layers.stream()
+                   .flatMap(List::stream).filter(Tile::isDomainObject)
+                   .map(Vertex.class::cast).collect(Collectors.toMap(Vertex::getDomainObj, Function.identity()));
         }
         return domainObj2Vertex.get(domainobj);
     }
@@ -311,7 +299,6 @@ public class GridGraph<T>  implements  Cloneable{
     public Tile getTile(int layer, int row) {
         return layers.get(layer).get(row);
     }
-
 
     public List<Tile> getRow(int iRow ) {
         List<Tile> row = new ArrayList<>(layers.size());
@@ -331,20 +318,18 @@ public class GridGraph<T>  implements  Cloneable{
         return new GridPrinter(this).getGridAsString();
     }
 
-
-
-
     //    ------ private  Methods ----
 
 
     /**
-     *
+     * Tries to swap the given Tile with the given row obeying the following rules.
+     * If theu are violated, no swap is performant and false is returned.
+     * 1. two Spacer
      * @param tileFrom
      * @param iRowTo
-     * @param tileSwapOrigin
      * @return
      */
-    private boolean swapTiles(Tile tileFrom, int iRowTo, Tile tileSwapOrigin) {
+    private boolean swapTiles(Tile tileFrom, int iRowTo) {
         boolean swapOk = true;
         Tile tileTo = getTile(tileFrom.getLayer(),iRowTo);
         if(tileFrom.isSpacer() && tileTo.isSpacer()) {
@@ -358,7 +343,7 @@ public class GridGraph<T>  implements  Cloneable{
         }
         Optional<Vertex> incomingFake = tileFrom.targetEdges.stream().map(Edge::getSource).filter(Vertex::isFake).findAny();
             if(swapOk && incomingFake.isPresent()) {
-                swapOk &= swapTiles(incomingFake.get(),iRowTo,tileSwapOrigin);
+                swapOk &= swapTiles(incomingFake.get(),iRowTo);
                 if(!swapOk) {
                     return  swapOk;
                 }
@@ -474,11 +459,8 @@ public class GridGraph<T>  implements  Cloneable{
     }
 
 
-    /*
-        z.B. ilayer = 0 und layersize = 0 --> Anlage neuer Layer
-     */
-    private void ensureLayerPresent(int iLayer) {
-        if (layers.size() <= iLayer) {
+       private void ensureLayerPresent(int iLayer) {
+        while (layers.size() <= iLayer) {
             layers.add(new ArrayList<>());
         }
     }
