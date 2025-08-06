@@ -30,6 +30,11 @@ public class GridGraphTest extends AbstractTest {
             assertEquals(i, vertex.getLayer(), vertex +" not on expected layer");
         }
     }
+    @Test
+    void printgraph () {
+        GridGraph<Integer> graph = generateComplexJPL().prepare();
+        System.out.println(graph);
+    }
 
 
     private List<Integer> walkBackToNoneFakes(Vertex start) {

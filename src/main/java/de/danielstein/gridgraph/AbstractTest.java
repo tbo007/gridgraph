@@ -2,7 +2,6 @@ package de.danielstein.gridgraph;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public abstract class AbstractTest {
 
@@ -15,7 +14,7 @@ public abstract class AbstractTest {
      *
      *       Erwartet: 2 Crossings / 2 Lineswitches
      */
-     GridGraph<String> generateCrossedPlan() {
+    public GridGraph<String> generateCrossedPlan() {
         //                                0        1       2       3      4       5
         List<String> v = Arrays.asList("start", "save", "info", "dbva", "frel", "ende");
         GridGraph<String>  graph = new GridGraph<>();
@@ -48,7 +47,7 @@ public abstract class AbstractTest {
      *           +-----------+--FREL-------+
      * To verify that layer creation can occur in any order "ende" ist added before restore and frel.
      */
-     GridGraph<String> generateJPL() {
+     public GridGraph<String> generateJPL() {
         List<String> v = Arrays.asList("start", "fanl", "save", "dbva", "restore", "frel", "ende");
         GridGraph<String>  graph = new GridGraph<String>();
         graph.addEdge(v.get(0),v.get(1)).addEdge(v.get(1),v.get(2)).addEdge(v.get(2),v.get(3)).addEdge(v.get(3),v.get(6))
@@ -60,7 +59,7 @@ public abstract class AbstractTest {
     }
 
     /** midsized Plan*/
-    GridGraph<Integer> generateJPLWithTwoMajorPaths() {
+    public GridGraph<Integer> generateJPLWithTwoMajorPaths() {
 
         GridGraph<Integer> graph = new GridGraph<Integer>();
         graph.addEdge(1,2).addEdge(2,3).addEdge(3,10)
@@ -77,7 +76,7 @@ public abstract class AbstractTest {
 
 
     /** Beispiel aus Obsidian Note 14b503*/
-    GridGraph<Integer> generateComplexJPL() {
+    public GridGraph<Integer> generateComplexJPL() {
 
         GridGraph<Integer>  graph = new GridGraph<Integer>();
         graph.addEdge(1,2).addEdge(2,3).addEdge(3,4).addEdge(3,15)
@@ -91,7 +90,7 @@ public abstract class AbstractTest {
     }
 
     /** Beispiel aus Obsidian Note kbm002*/
-    GridGraph<Integer> generateJPLkbm002() {
+    public  GridGraph<Integer> generateJPLkbm002() {
 
         GridGraph<Integer>  graph = new GridGraph<Integer>();
         graph.addEdge(1,2).addEdge(2,3).addEdge(3,4).addEdge(3,10)

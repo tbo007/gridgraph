@@ -7,7 +7,10 @@
     <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment=" Grid Graph Documentation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AbstractTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AbstractTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Vertex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AbstractTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/AbstractTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,9 +72,15 @@
     "JUnit.GridGraphTest.getCrossingEdges.executor": "Debug",
     "JUnit.GridGraphTest.getCrossingEdgesJpl1.executor": "Run",
     "JUnit.GridGraphTest.layering.executor": "Run",
+    "JUnit.GridGraphTest.printgraph.executor": "Debug",
     "JUnit.GridGraphTest.testSwapTile.executor": "Run",
+    "JUnit.JeneticsTest.layout2PathsJPL.executor": "Run",
     "JUnit.JeneticsTest.layoutComplexJPL.executor": "Run",
+    "JUnit.JeneticsTest.layoutStandardJPL.executor": "Run",
     "JavaClassFindUsagesOptions.isImplementingClasses": "true",
+    "Maven.GridGraph [clean].executor": "Run",
+    "Maven.GridGraph [deploy].executor": "Run",
+    "Maven.GridGraph [install].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -89,6 +98,9 @@
     <key name="MoveInnerDialog.RECENTS_KEY">
       <recent name="de.danielstein.gridgraph" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="de.danielstein.gridgraph" />
+    </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="de.danielstein.gridgraph" />
     </key>
@@ -101,7 +113,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.GridGraphTest.getCrossingEdges">
+  <component name="RunManager" selected="JUnit.GridGraphTest.printgraph">
     <configuration name="GridGraphTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -113,38 +125,6 @@
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GridGraphTest.getCrossingEdges" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="getCrossingEdges" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GridGraphTest.getCrossingEdgesJpl1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="getCrossingEdgesJpl1" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -165,7 +145,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.testSwapTile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GridGraphTest.printgraph" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -175,7 +155,39 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="testSwapTile" />
+      <option name="METHOD_NAME" value="printgraph" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JeneticsTest.layout2PathsJPL" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.JeneticsTest" />
+      <option name="METHOD_NAME" value="layout2PathsJPL" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JeneticsTest.layoutStandardJPL" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.JeneticsTest" />
+      <option name="METHOD_NAME" value="layoutStandardJPL" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -183,11 +195,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GridGraphTest.getCrossingEdges" />
+        <item itemvalue="JUnit.GridGraphTest.printgraph" />
         <item itemvalue="JUnit.GridGraphTest" />
-        <item itemvalue="JUnit.GridGraphTest.getCrossingEdgesJpl1" />
-        <item itemvalue="JUnit.GridGraphTest.testSwapTile" />
         <item itemvalue="JUnit.GridGraphTest.layering" />
+        <item itemvalue="JUnit.JeneticsTest.layout2PathsJPL" />
+        <item itemvalue="JUnit.JeneticsTest.layoutStandardJPL" />
       </list>
     </recent_temporary>
   </component>
@@ -555,6 +567,19 @@
           <line>108</line>
           <option name="timeStamp" value="87" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
+          <line>259</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="111" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/JeneticsTest.java</url>
           <line>54</line>
@@ -565,9 +590,9 @@
           <option name="timeStamp" value="92" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AbstractTest.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/AbstractTest.java</url>
           <line>79</line>
-          <properties class="de.danielstein.gridgraph.AbstractTest" method="generateComplexJPL">
+          <properties class="de.danielstein.gridgraph.AbstractTest">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>

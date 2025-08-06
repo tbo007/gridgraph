@@ -1,6 +1,5 @@
 package de.danielstein.gridgraph;
 
-import java.io.StringWriter;
 import java.util.List;
 
 public class GridPrinter {
@@ -54,12 +53,34 @@ public class GridPrinter {
                 // Element der aktuellen Zeile und Spalte hinzufügen
                 Tile tile = column.size() > row ? column.get(row) : null;
 
-                sb.append(String.format("%" + maxLength + "s ", tile.toString()));
+                sb.append(String.format("%" + maxLength + "s ", tile2String(tile)));
             }
             // Nach jeder Zeile einen Zeilenumbruch hinzufügen
             sb.append("\n");
         }
 
         return sb.toString();
+    }
+
+    private String tile2String(Tile tile) {
+        if ( tile == null || tile.isSpacer()) {
+            return "";
+        }
+        Vertex vertex = (Vertex) tile;
+        if ( vertex.isDomainObject()) {
+            StringBuilder b = new StringBuilder();
+            long countIRows = vertex.incomingEdgesFrom().stream().map(Vertex::getRow).distinct().count();
+            b.append(countIRows > 1 ? "+-"  : "--");
+            b.append(vertex.getDomainObj().toString());
+            long countORows = vertex.outgoingEdgesTo().stream().map(Vertex::getRow).distinct().count();
+            b.append(countORows > 1 ? "-+"  : "--");
+            return  b.toString();
+        }
+        // Fake
+        StringBuilder b = new StringBuilder(3);
+        b.append(vertex.incomingEdgesFrom().size() > 1 ? '+' : '-');
+        b.append('-');
+        b.append(vertex.outgoingEdgesTo().size() > 1 ? '+' : '-');
+        return b.toString();
     }
 }

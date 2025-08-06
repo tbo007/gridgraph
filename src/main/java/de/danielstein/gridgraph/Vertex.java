@@ -51,7 +51,7 @@ public class Vertex  extends Tile{
     @Override
     public String toString() {
         if(isFake()) {
-            return "F" + id;
+            return "F" + id ;
         }
         if(isDomainObject()) {
             return "D" + id + "(" + domainObj + ")";

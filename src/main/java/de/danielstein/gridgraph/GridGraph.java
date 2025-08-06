@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  * any vertex with no incoming edges determines the column count
  * rows: The column with the most vertices determines the rowsize for the entire grid
  *
- * Ussage (supossing JOBS is tge Domain Class):
+ * Ussage (supossing JOBS is the Domain Class):
  * 1. prepare
  * GridGraph<JOBS> graph = new GridGraph<>()
  * For every Edge: @see {@link #addEdge(T source , T target)}
@@ -312,6 +312,10 @@ public class GridGraph<T>  implements  Cloneable{
         return swapTiles(end.getLayer(), end.getRow(), 0);
     }
 
+    public List<List<Tile>> getLayers() {
+        return layers;
+    }
+
 
     @Override
     public String toString() {
@@ -488,7 +492,7 @@ public class GridGraph<T>  implements  Cloneable{
         }
     }
 
-    private void swap(int iLayer, int iFrom, int iTo) {
+    public void swap(int iLayer, int iFrom, int iTo) {
         List<Tile> layer = layers.get(iLayer);
         Tile tileFrom = layer.get(iFrom);
         tileFrom.setRow(iTo);
@@ -527,7 +531,7 @@ public class GridGraph<T>  implements  Cloneable{
         return cnt;
     }
 
-    private List<Edge> getSourceEdges() {
+    public List<Edge> getSourceEdges() {
         return layers.stream().flatMap(Collection::stream).flatMap (t -> t.sourceEdges.stream()).collect(Collectors.toList());
     }
 

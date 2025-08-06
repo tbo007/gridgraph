@@ -76,6 +76,9 @@ public class Tile implements Cloneable {
         clone.layer = layer;
         clone.row = row;
         return clone;
+    }
 
+    public List<Edge> getSourceEdges() {
+        return Collections.unmodifiableList( sourceEdges);
     }
 }
