@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment=" Grid Graph Changes for Z3 use">
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment=" AWA 2 GridGraph">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AWAConverterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AWAConverterTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +17,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JUnit5 Test Class" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -75,7 +76,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.BoxDrawing.executor": "Run",
     "JUnit.AWAConverterTest.testRead.executor": "Run",
+    "JUnit.BoxDrawingTest.testDraw.executor": "Run",
     "JUnit.GridGraphTest.executor": "Run",
     "JUnit.GridGraphTest.getCrossingEdges.executor": "Debug",
     "JUnit.GridGraphTest.getCrossingEdgesJpl1.executor": "Run",
@@ -124,6 +127,19 @@
     </option>
   </component>
   <component name="RunManager" selected="JUnit.AWAConverterTest.testRead">
+    <configuration name="BoxDrawing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.BoxDrawing" />
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="AWAConverterTest.testRead" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -135,6 +151,22 @@
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.AWAConverterTest" />
       <option name="METHOD_NAME" value="testRead" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BoxDrawingTest.testDraw" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.BoxDrawingTest" />
+      <option name="METHOD_NAME" value="testDraw" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -155,22 +187,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.layering" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="layering" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="GridGraphTest.printgraph" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -187,29 +203,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="JeneticsTest.layout2PathsJPL" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.JeneticsTest" />
-      <option name="METHOD_NAME" value="layout2PathsJPL" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.AWAConverterTest.testRead" />
+        <item itemvalue="JUnit.BoxDrawingTest.testDraw" />
+        <item itemvalue="Application.BoxDrawing" />
         <item itemvalue="JUnit.GridGraphTest.printgraph" />
         <item itemvalue="JUnit.GridGraphTest" />
-        <item itemvalue="JUnit.GridGraphTest.layering" />
-        <item itemvalue="JUnit.JeneticsTest.layout2PathsJPL" />
       </list>
     </recent_temporary>
   </component>
@@ -518,7 +518,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755335780434</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary=" AWA 2 GridGraph">
+      <option name="closed" value="true" />
+      <created>1755439506565</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1755439506565</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -533,7 +541,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Entw. addFakeNotes / Util Methods" />
     <MESSAGE value="Bugfixes addFakeNotes" />
     <MESSAGE value="Bugfixes" />
     <MESSAGE value="Entw. Crossing Detect" />
@@ -558,81 +565,23 @@
     <MESSAGE value="Grid" />
     <MESSAGE value=" Grid Graph Documentation" />
     <MESSAGE value=" Grid Graph Changes for Z3 use" />
-    <option name="LAST_COMMIT_MESSAGE" value=" Grid Graph Changes for Z3 use" />
+    <MESSAGE value=" AWA 2 GridGraph" />
+    <option name="LAST_COMMIT_MESSAGE" value=" AWA 2 GridGraph" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/lib/src.zip!/java.base/java/lang/Character.java</url>
-          <line>8</line>
-          <option name="timeStamp" value="22" />
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Symbol.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="122" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/experiment/ListGene.java</url>
-          <line>25</line>
-          <option name="timeStamp" value="53" />
+          <condition expression="retVal == null" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/BoxDrawing.java</url>
+          <line>84</line>
+          <option name="timeStamp" value="125" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/lib/src.zip!/java.base/java/util/Collections.java</url>
-          <line>425</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/lib/src.zip!/java.base/java/util/Collections.java</url>
-          <line>458</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/lib/src.zip!/java.base/java/util/Random.java</url>
-          <line>328</line>
-          <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/JeneticsTest.java</url>
-          <line>108</line>
-          <option name="timeStamp" value="87" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java</url>
-          <line>259</line>
-          <properties>
-            <option name="lambda-ordinal" value="-1" />
-          </properties>
-          <option name="timeStamp" value="110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/AWAConverter.java</url>
-          <line>27</line>
-          <option name="timeStamp" value="112" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/JeneticsTest.java</url>
-          <line>54</line>
-          <properties class="de.danielstein.gridgraph.JeneticsTest" method="layout2PathsJPL">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="92" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/AbstractTest.java</url>
-          <line>79</line>
-          <properties class="de.danielstein.gridgraph.AbstractTest">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="java.lang.NullPointerException" package="java.lang" />
-          <option name="timeStamp" value="59" />
-        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -640,10 +589,5 @@
         <PinnedItemInfo parentTag="de.danielstein.gridgraph.GridGraph" memberName="layers" />
       </pinned-members>
     </pin-to-top-manager>
-    <watches-manager>
-      <configuration name="JUnit">
-        <watch expression="JsonPath.read(documentContext,&quot;$.data.jobp.line_conditions&quot;);" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

@@ -1,0 +1,1390 @@
+{
+  "total": 1,
+  "data": {
+    "jobp": {
+      "metadata": {
+        "version": "21.0.11"
+      },
+      "general_attributes": {
+        "type": "JOBP",
+        "name": "SYT007",
+        "description": "Übertragung und Aktivierung aller Objekte in Produktion(DKS) und Test",
+        "workflow_children": 31,
+        "max_parallel_action": 1,
+        "mrt_time": "000000",
+        "ert": 717,
+        "queue": "CLIENT_QUEUE",
+        "auto_deactivation": "F",
+        "minimum_ae_version": "11.2"
+      },
+      "sync_list": [
+        {
+          "sync_object": "SYNC.SOLDNEU",
+          "start_action": "USE",
+          "end_action": "RELEASE",
+          "abend_action": "RELEASE",
+          "else_action": "W"
+        }
+      ],
+      "rollback_definitions": {
+
+      },
+      "workflow_attributes": {
+
+      },
+      "workflow_definitions": [
+        {
+          "line_number": 1,
+          "object_type": "\u003CSTART\u003E",
+          "object_name": "START",
+          "precondition_error_action": "S",
+          "row": 3,
+          "column": 1,
+          "active": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 2,
+          "object_type": "\u003CXTRNL\u003E",
+          "object_name": "KS_SAVE_ALL",
+          "row": 9,
+          "column": 1,
+          "ext_precondition_ok_status": "ENDED_OK",
+          "ext_precondition_sltt": "2",
+          "ext_precondition_slt": 21600,
+          "ext_precondition_action": "0",
+          "ext_precondition_alarm_flag": "0",
+          "ext_precondition_timeout_action": "0",
+          "ext_precondition_timeout_alarm": "0"
+        },
+        {
+          "line_number": 3,
+          "object_type": "JOBS",
+          "object_name": "SYT007_SFIL01",
+          "precondition_error_action": "H",
+          "predecessors": 1,
+          "row": 2,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 4,
+          "object_type": "JOBS",
+          "object_name": "SYT007_SFIL02",
+          "precondition_error_action": "H",
+          "predecessors": 1,
+          "row": 3,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 5,
+          "object_type": "JOBP",
+          "object_name": "GFM_SAVE_OBJECT_TEST",
+          "precondition_error_action": "H",
+          "predecessors": 1,
+          "row": 4,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 6,
+          "object_type": "JOBP",
+          "object_name": "GFM_SAVE_OBJECT_PROD",
+          "precondition_error_action": "H",
+          "predecessors": 1,
+          "row": 5,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 7,
+          "object_type": "JOBP",
+          "object_name": "SYT008_SAVE.DEBUG",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 6,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 8,
+          "object_type": "JOBP",
+          "object_name": "GFM_SAVE_SOLDPROD",
+          "precondition_error_action": "H",
+          "predecessors": 1,
+          "row": 7,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "external_predecessors": 1,
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 9,
+          "object_type": "JOBS",
+          "object_name": "SYT007_SFIL05",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 8,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 10,
+          "object_type": "JOBS",
+          "object_name": "SYT007_SFIL03",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 9,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "external_predecessors": 1,
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 11,
+          "object_type": "JOBS",
+          "object_name": "SYT007_SFIL06",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 10,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 12,
+          "object_type": "JOBP",
+          "object_name": "GFM_SAVE_SOLDTEST",
+          "precondition_error_action": "H",
+          "predecessors": 1,
+          "row": 11,
+          "column": 2,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "external_predecessors": 1,
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 13,
+          "object_type": "JOBS",
+          "object_name": "SYT007_FREL03",
+          "precondition_error_action": "S",
+          "predecessors": 8,
+          "row": 3,
+          "column": 3,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 14,
+          "object_type": "JOBS",
+          "object_name": "SYT007_SFIL04",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 10,
+          "column": 4,
+          "active": 1,
+          "postcondition_ok_status": "ANY_OK",
+          "postcondition_action": 2,
+          "postcondition_max_repeats": 1,
+          "postcondition_repeat_waittime": 10,
+          "mrt_time": "000000",
+          "has_postconditions": 1,
+          "childflags": "0010000000000000"
+        },
+        {
+          "line_number": 15,
+          "object_type": "JOBP",
+          "object_name": "SYT007_UDBV",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 3,
+          "column": 4,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 16,
+          "object_type": "JOBS",
+          "object_name": "SYT007_FKOP05",
+          "precondition_error_action": "S",
+          "predecessors": 3,
+          "row": 2,
+          "column": 5,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000",
+          "rollback_enabled": 1
+        },
+        {
+          "line_number": 17,
+          "object_type": "JOBP",
+          "object_name": "GFM_REST_SOLDPROD",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 4,
+          "column": 10,
+          "active": 1,
+          "postcondition_ok_status": "ANY_OK",
+          "postcondition_action": 2,
+          "mrt_time": "000000",
+          "has_postconditions": 1,
+          "childflags": "0010000000000000"
+        },
+        {
+          "line_number": 18,
+          "object_type": "JOBS",
+          "object_name": "SYT007_RFIL01",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 5,
+          "column": 10,
+          "active": 1,
+          "postcondition_ok_status": "ANY_OK",
+          "postcondition_action": 2,
+          "mrt_time": "000000",
+          "has_postconditions": 1,
+          "childflags": "0010000000000000"
+        },
+        {
+          "line_number": 19,
+          "object_type": "JOBS",
+          "object_name": "SYT007_RFIL02",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 6,
+          "column": 10,
+          "active": 1,
+          "postcondition_ok_status": "ANY_OK",
+          "postcondition_action": 2,
+          "mrt_time": "000000",
+          "has_postconditions": 1,
+          "childflags": "0010000000000000"
+        },
+        {
+          "line_number": 20,
+          "object_type": "JOBS",
+          "object_name": "SYT007_RFIL05",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 7,
+          "column": 10,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 21,
+          "object_type": "JOBS",
+          "object_name": "SYT007_RFIL06",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 8,
+          "column": 10,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 22,
+          "object_type": "JOBS",
+          "object_name": "SYT007_VERB02",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 9,
+          "column": 8,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 23,
+          "object_type": "JOBS",
+          "object_name": "SYT007_FKOP03",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 2,
+          "column": 6,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 24,
+          "object_type": "JOBS",
+          "object_name": "14T701_VERB02",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 7,
+          "column": 11,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 25,
+          "object_type": "JOBP",
+          "object_name": "GFM_REST_OBJECT_PROD",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 9,
+          "column": 10,
+          "active": 1,
+          "postcondition_ok_status": "ANY_OK",
+          "postcondition_action": 2,
+          "mrt_time": "000000",
+          "has_postconditions": 1,
+          "childflags": "0010000000000000"
+        },
+        {
+          "line_number": 26,
+          "object_type": "JOBS",
+          "object_name": "SYT007_DBVA02",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 2,
+          "column": 7,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 27,
+          "object_type": "JOBS",
+          "object_name": "SYT007_DBVA03",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 2,
+          "column": 8,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 28,
+          "object_type": "JOBS",
+          "object_name": "SYT007_FREL01",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 2,
+          "column": 9,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 29,
+          "object_type": "JOBS",
+          "object_name": "SYT007_FREL02",
+          "precondition_error_action": "S",
+          "predecessors": 1,
+          "row": 2,
+          "column": 10,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 30,
+          "object_type": "JOBS",
+          "object_name": "SYT007_INFO01",
+          "precondition_error_action": "S",
+          "precondition_type": "O",
+          "predecessors": 19,
+          "row": 11,
+          "column": 12,
+          "active": 1,
+          "postcondition_action": 1,
+          "mrt_time": "000000",
+          "connected_to_end": 1,
+          "childflags": "0000000000000000"
+        },
+        {
+          "line_number": 31,
+          "object_type": "\u003CEND\u003E",
+          "object_name": "END",
+          "precondition_error_action": "A",
+          "predecessors": 8,
+          "row": 1,
+          "column": 13,
+          "active": 1,
+          "mrt_time": "000000",
+          "childflags": "0000000000000000"
+        }
+      ],
+      "line_conditions": [
+        {
+          "workflow_line_number": 3,
+          "line_number": 1,
+          "predecessor_line_number": 1
+        },
+        {
+          "workflow_line_number": 4,
+          "line_number": 1,
+          "predecessor_line_number": 1
+        },
+        {
+          "workflow_line_number": 5,
+          "line_number": 1,
+          "predecessor_line_number": 1
+        },
+        {
+          "workflow_line_number": 6,
+          "line_number": 1,
+          "predecessor_line_number": 1
+        },
+        {
+          "workflow_line_number": 7,
+          "line_number": 1,
+          "predecessor_line_number": 1,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 8,
+          "line_number": 1,
+          "predecessor_line_number": 1
+        },
+        {
+          "workflow_line_number": 9,
+          "line_number": 1,
+          "predecessor_line_number": 1,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 10,
+          "line_number": 1,
+          "predecessor_line_number": 1,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 11,
+          "line_number": 1,
+          "predecessor_line_number": 1,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 12,
+          "line_number": 1,
+          "predecessor_line_number": 1
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 1,
+          "predecessor_line_number": 3,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 14,
+          "line_number": 1,
+          "predecessor_line_number": 10,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 15,
+          "line_number": 1,
+          "predecessor_line_number": 13,
+          "ok_status": "NOT_SKIPPED"
+        },
+        {
+          "workflow_line_number": 16,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 17,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 18,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 19,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 20,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 21,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 22,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ABEND_DBVA"
+        },
+        {
+          "workflow_line_number": 23,
+          "line_number": 1,
+          "predecessor_line_number": 16,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 24,
+          "line_number": 1,
+          "predecessor_line_number": 20,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 25,
+          "line_number": 1,
+          "predecessor_line_number": 22,
+          "ok_status": "NOT_SKIPPED"
+        },
+        {
+          "workflow_line_number": 26,
+          "line_number": 1,
+          "predecessor_line_number": 23,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 27,
+          "line_number": 1,
+          "predecessor_line_number": 26,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 28,
+          "line_number": 1,
+          "predecessor_line_number": 27,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 29,
+          "line_number": 1,
+          "predecessor_line_number": 28,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 1,
+          "predecessor_line_number": 15,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 1,
+          "predecessor_line_number": 17,
+          "ok_status": "ENDED_SKIPPED"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 2,
+          "predecessor_line_number": 18,
+          "ok_status": "ENDED_SKIPPED"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 2,
+          "predecessor_line_number": 14,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 16,
+          "line_number": 2,
+          "predecessor_line_number": 14,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 10,
+          "line_number": 2,
+          "predecessor_line_number": 2,
+          "ok_status": "ENDED_OK"
+        },
+        {
+          "workflow_line_number": 8,
+          "line_number": 2,
+          "predecessor_line_number": 2,
+          "ok_status": "ENDED_OK"
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 2,
+          "predecessor_line_number": 4,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 12,
+          "line_number": 2,
+          "predecessor_line_number": 2,
+          "ok_status": "ENDED_OK"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 3,
+          "predecessor_line_number": 12,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 3,
+          "predecessor_line_number": 5,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 16,
+          "line_number": 3,
+          "predecessor_line_number": 12,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 3,
+          "predecessor_line_number": 19,
+          "ok_status": "ENDED_SKIPPED"
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 4,
+          "predecessor_line_number": 6,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 4,
+          "predecessor_line_number": 25,
+          "ok_status": "ENDED_SKIPPED"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 4,
+          "predecessor_line_number": 23,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 5,
+          "predecessor_line_number": 26,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 5,
+          "predecessor_line_number": 7,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 5,
+          "predecessor_line_number": 29,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 6,
+          "predecessor_line_number": 24,
+          "ok_status": "ENDED_SKIPPED"
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 6,
+          "predecessor_line_number": 8,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 6,
+          "predecessor_line_number": 27,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 7,
+          "predecessor_line_number": 28,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 7,
+          "predecessor_line_number": 9,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 7,
+          "predecessor_line_number": 13,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 13,
+          "line_number": 8,
+          "predecessor_line_number": 11,
+          "ok_status": "ENDED_OK_OR_INACTIV"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 8,
+          "predecessor_line_number": 3,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 31,
+          "line_number": 8,
+          "predecessor_line_number": 21,
+          "ok_status": "ENDED_SKIPPED"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 9,
+          "predecessor_line_number": 4,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 10,
+          "predecessor_line_number": 5,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 11,
+          "predecessor_line_number": 6,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 12,
+          "predecessor_line_number": 8,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 13,
+          "predecessor_line_number": 10,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 14,
+          "predecessor_line_number": 29,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 15,
+          "predecessor_line_number": 7,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 16,
+          "predecessor_line_number": 9,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 17,
+          "predecessor_line_number": 13,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 18,
+          "predecessor_line_number": 11,
+          "ok_status": "ANY_ABEND"
+        },
+        {
+          "workflow_line_number": 30,
+          "line_number": 19,
+          "predecessor_line_number": 16,
+          "ok_status": "ANY_ABEND"
+        }
+      ],
+      "conditions": [
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 1,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_line_number": 1,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_line_number": 1,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_line_number": 1,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_line_number": 1,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 2,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_line_number": 2,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_line_number": 2,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_line_number": 2,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_line_number": 2,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 3,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_line_number": 3,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_line_number": 3,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_line_number": 3,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_line_number": 3,
+          "name": "STATUS",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 4,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_line_number": 4,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_line_number": 4,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_line_number": 4,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_line_number": 4,
+          "name": "STATUS",
+          "type": "E",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 5,
+          "name": "USER DEFINED",
+          "type": "C",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_line_number": 5,
+          "name": "EXECUTE OBJECT",
+          "type": "A",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_line_number": 5,
+          "name": "EXECUTE OBJECT",
+          "type": "A",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_line_number": 5,
+          "name": "EXECUTE OBJECT",
+          "type": "A",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_line_number": 5,
+          "name": "EXECUTE OBJECT",
+          "type": "A",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 6,
+          "name": "RESTART TASK",
+          "type": "A",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_line_number": 6,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_line_number": 6,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_line_number": 6,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_line_number": 6,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 7,
+          "name": "USER DEFINED",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_line_number": 7,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_line_number": 7,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_line_number": 7,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_line_number": 7,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 8,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_line_number": 9,
+          "name": "STATUS",
+          "type": "F",
+          "active": 1
+        }
+      ],
+      "condition_values": [
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_link_line_number": 1,
+          "variable": "xc_p01",
+          "value": "ENDED_SKIPPED",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_link_line_number": 3,
+          "variable": "xc_p01",
+          "value": "ANY_OK",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p01",
+          "value": "&$RESTART_COUNT#",
+          "type": "V",
+          "alternative_view": 1
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p02",
+          "value": "\u003C",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p03",
+          "value": "1",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 14,
+          "execution_time": 2,
+          "condition_link_line_number": 6,
+          "variable": "xc_p01",
+          "value": "10",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_link_line_number": 1,
+          "variable": "xc_p01",
+          "value": "ENDED_SKIPPED",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_link_line_number": 3,
+          "variable": "xc_p01",
+          "value": "ANY_OK",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p01",
+          "value": "CALL_ABRT_001",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p02",
+          "value": "\u003CParameters\u003E",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p03",
+          "value": "##911011",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 17,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p04",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_link_line_number": 1,
+          "variable": "xc_p01",
+          "value": "ENDED_SKIPPED",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_link_line_number": 3,
+          "variable": "xc_p01",
+          "value": "ANY_OK",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p01",
+          "value": "CALL_ABRT_001",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p02",
+          "value": "\u003CParameters\u003E",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p03",
+          "value": "##911011",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 18,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p04",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_link_line_number": 1,
+          "variable": "xc_p01",
+          "value": "ENDED_SKIPPED",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_link_line_number": 3,
+          "variable": "xc_p01",
+          "value": "ANY_OK",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p01",
+          "value": "CALL_ABRT_001",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p02",
+          "value": "\u003CParameters\u003E",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p03",
+          "value": "##911011",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 19,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p04",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_link_line_number": 1,
+          "variable": "xc_p01",
+          "value": "ENDED_SKIPPED",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_link_line_number": 3,
+          "variable": "xc_p01",
+          "value": "ANY_OK",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p01",
+          "value": "CALL_ABRT_001",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p02",
+          "value": "\u003CParameters\u003E",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p03",
+          "value": "##911011",
+          "type": "V"
+        },
+        {
+          "workflow_line_number": 25,
+          "execution_time": 2,
+          "condition_link_line_number": 5,
+          "variable": "xc_p04",
+          "type": "V"
+        }
+      ]
+    }
+  },
+  "path": "ARBEITSVORBEREITUNG/KERNSYSTEM/JOBOBJEKTE/SY/SYT007",
+  "client": 110,
+  "hasmore": false
+}

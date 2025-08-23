@@ -63,7 +63,7 @@ public class GridPrinter {
     }
 
     private String tile2String(Tile tile) {
-        if ( tile == null || tile.isSpacer()) {
+        if (  tile.isSpacer()) {
             return "";
         }
         Vertex vertex = (Vertex) tile;

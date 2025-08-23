@@ -12,6 +12,7 @@ public class AWAConverterTest {
         Path path = Path.of("src/test/resources/syt007.json");
         AWAConverter converter = new AWAConverter(path);
         GridGraph<?> gridGraph = converter.convert();
-        System.out.println(gridGraph);
+        BoxDrawing drawing = new BoxDrawing(gridGraph);
+        System.out.println(drawing.draw());
     }
 }
