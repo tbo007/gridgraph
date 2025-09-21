@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment=" AWA 2 GridGraph">
+    <list default="true" id="27e35359-3909-46aa-b6ca-832a92a5b277" name="Changes" comment="BoxDrawing Fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridPrinter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AWAConverterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/AWAConverterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/GridGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/PositionAwareList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/danielstein/gridgraph/GridGraphTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,36 +75,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.BoxDrawing.executor": "Run",
-    "JUnit.AWAConverterTest.testRead.executor": "Run",
-    "JUnit.BoxDrawingTest.testDraw.executor": "Run",
-    "JUnit.GridGraphTest.executor": "Run",
-    "JUnit.GridGraphTest.getCrossingEdges.executor": "Debug",
-    "JUnit.GridGraphTest.getCrossingEdgesJpl1.executor": "Run",
-    "JUnit.GridGraphTest.layering.executor": "Run",
-    "JUnit.GridGraphTest.printgraph.executor": "Debug",
-    "JUnit.GridGraphTest.testSwapTile.executor": "Run",
-    "JUnit.JeneticsTest.layout2PathsJPL.executor": "Run",
-    "JUnit.JeneticsTest.layoutComplexJPL.executor": "Run",
-    "JUnit.JeneticsTest.layoutStandardJPL.executor": "Run",
-    "JavaClassFindUsagesOptions.isImplementingClasses": "true",
-    "Maven.GridGraph [clean].executor": "Run",
-    "Maven.GridGraph [deploy].executor": "Run",
-    "Maven.GridGraph [install].executor": "Run",
-    "Maven.gridgraph [clean].executor": "Run",
-    "Maven.gridgraph [install].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BoxDrawing.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AWAConverterTest.testRead.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BoxDrawingTest.testDraw.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BoxDrawingTest.testDrawJPL.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BoxDrawingTest.testSymbolMerge.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GridGraphTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GridGraphTest.getCrossingEdges.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.GridGraphTest.getCrossingEdgesJpl1.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GridGraphTest.layering.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GridGraphTest.printgraph.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.GridGraphTest.testSwap.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GridGraphTest.testSwapTile.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.JeneticsTest.layout2PathsJPL.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.JeneticsTest.layoutComplexJPL.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.JeneticsTest.layoutStandardJPL.executor&quot;: &quot;Run&quot;,
+    &quot;JavaClassFindUsagesOptions.isImplementingClasses&quot;: &quot;true&quot;,
+    &quot;Maven.GridGraph [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.GridGraph [deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.GridGraph [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.gridgraph [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.gridgraph [install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;boxdraw&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -126,20 +130,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.AWAConverterTest.testRead">
-    <configuration name="BoxDrawing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.BoxDrawing" />
-      <module name="GridGraph" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.GridGraphTest.testSwap">
     <configuration name="AWAConverterTest.testRead" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
@@ -172,7 +163,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BoxDrawingTest.testDrawJPL" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -181,13 +172,30 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
-      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.BoxDrawingTest" />
+      <option name="METHOD_NAME" value="testDrawJPL" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GridGraphTest.printgraph" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BoxDrawingTest.testSymbolMerge" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GridGraph" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="de.danielstein.gridgraph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
+      <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.BoxDrawingTest" />
+      <option name="METHOD_NAME" value="testSymbolMerge" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GridGraphTest.testSwap" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GridGraph" />
       <extension name="coverage">
         <pattern>
@@ -197,7 +205,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="de.danielstein.gridgraph" />
       <option name="MAIN_CLASS_NAME" value="de.danielstein.gridgraph.GridGraphTest" />
-      <option name="METHOD_NAME" value="printgraph" />
+      <option name="METHOD_NAME" value="testSwap" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -205,11 +213,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.GridGraphTest.testSwap" />
+        <item itemvalue="JUnit.BoxDrawingTest.testDrawJPL" />
+        <item itemvalue="JUnit.BoxDrawingTest.testSymbolMerge" />
         <item itemvalue="JUnit.AWAConverterTest.testRead" />
         <item itemvalue="JUnit.BoxDrawingTest.testDraw" />
-        <item itemvalue="Application.BoxDrawing" />
-        <item itemvalue="JUnit.GridGraphTest.printgraph" />
-        <item itemvalue="JUnit.GridGraphTest" />
       </list>
     </recent_temporary>
   </component>
@@ -526,7 +534,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755439506565</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="BoxDrawing">
+      <option name="closed" value="true" />
+      <created>1755945432498</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1755945432498</updated>
+    </task>
+    <task id="LOCAL-00040" summary="BoxDrawing Fixes">
+      <option name="closed" value="true" />
+      <created>1756560043513</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1756560043513</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -541,8 +565,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bugfixes addFakeNotes" />
-    <MESSAGE value="Bugfixes" />
     <MESSAGE value="Entw. Crossing Detect" />
     <MESSAGE value="Erster kompletter Durchstich !" />
     <MESSAGE value="Layout Optimierung" />
@@ -566,21 +588,30 @@
     <MESSAGE value=" Grid Graph Documentation" />
     <MESSAGE value=" Grid Graph Changes for Z3 use" />
     <MESSAGE value=" AWA 2 GridGraph" />
-    <option name="LAST_COMMIT_MESSAGE" value=" AWA 2 GridGraph" />
+    <MESSAGE value="BoxDrawing" />
+    <MESSAGE value="BoxDrawing Fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="BoxDrawing Fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/Symbol.java</url>
-          <line>50</line>
-          <option name="timeStamp" value="122" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <condition expression="retVal == null" language="JAVA" />
           <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/BoxDrawing.java</url>
-          <line>84</line>
+          <line>87</line>
           <option name="timeStamp" value="125" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <condition expression="source.isDomainObject() &amp;&amp; source.getDomainObj().equals(29)" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/BoxDrawing.java</url>
+          <line>135</line>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="layerNum == 1 &amp;&amp; row == 1" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/de/danielstein/gridgraph/BoxDrawing.java</url>
+          <line>38</line>
+          <option name="timeStamp" value="154" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

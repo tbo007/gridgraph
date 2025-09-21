@@ -144,6 +144,20 @@ public class GridGraphTest extends AbstractTest {
         assertEquals(graph.getRow(4), row0);
     }
 
+    @Test
+    void testSwap(){
+    // Swap in eine nicht existierende Zeile. Diese muss dann vorher eingefügt werden
+        GridGraph<String> gridGraph = generateJPL().prepare();
+        System.out.println(new BoxDrawing(gridGraph).draw());
+        gridGraph.swap(0,0,1);
+        System.out.println(new BoxDrawing(gridGraph).draw());
+        gridGraph.swap(0,1,4);
+        System.out.println(new BoxDrawing(gridGraph).draw());
+
+
+
+    }
+
 
     /*
                 S0          S1          S2          S3          S4          S5

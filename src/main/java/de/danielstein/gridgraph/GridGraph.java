@@ -496,10 +496,20 @@ public class GridGraph<T>  implements  Cloneable{
         List<Tile> layer = layers.get(iLayer);
         Tile tileFrom = layer.get(iFrom);
         tileFrom.setRow(iTo);
+        while (layer.size() <= iTo) {
+            addRowToAllLayers();
+
+        }
         Tile tileTo = layer.get(iTo);
         tileTo.setRow(iFrom);
         layer.set(iTo,tileFrom);
         layer.set(iFrom,tileTo);
+    }
+
+    private void addRowToAllLayers() {
+        for (List<Tile> layer : layers) {
+            layer.add(new Tile());
+        }
     }
 
 
